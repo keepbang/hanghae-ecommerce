@@ -22,9 +22,13 @@
 - Gradle 8.7
 - JPA
 - JUnit + AssertJ
-- H2 Database  
+- H2 Database 
 
 ---
+
+# Milestone
+
+
 # ERD
 
 
