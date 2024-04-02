@@ -17,12 +17,12 @@
 
 ### Environment
 
-- Spring Boot 3.2.4
-- Java 17
-- Gradle 8.7
-- JPA
-- JUnit + AssertJ
-- H2 Database 
+- Spring Boot 3.2.4  
+- Java 17  
+- Gradle 8.7  
+- JPA  
+- JUnit + AssertJ  
+- H2 Database  
 
 ---
 
@@ -30,6 +30,6 @@
 ![milestone](images/img.png)
 
 # ERD
-
+![erd.png](images/erd.png)
 
 # API Spec
