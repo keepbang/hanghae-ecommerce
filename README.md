@@ -33,3 +33,111 @@
 ![img.png](images/erd.png)
 
 # API Spec
+
+---
+
+## 상품
+
+### 상품 조회 API
+
+- 요구사항 
+  - 상품 아이디로 상품 정보 및 잔여수량을 조회한다.
+
+<br/>
+
+`Endpoint`
+```
+GET http://{host}/products/{id}
+```
+<br/>
+
+
+`Request` **Path variable** 
+
+| 파라미터   | 타입      | 필수여부 | 설명     |
+|--------|---------|------|--------|
+| id     | integer | Y    | 상품 아이디 |
+
+
+`Response` **Response body**
+
+| 파라미터      | 타입      | 필수여부 | 설명     |
+|-----------|---------|------|--------|
+| productId | integer | Y    | 상품 아이디 |
+| name      | string  | Y    | 상품 이름  |
+| price     | integer | Y    | 상품 가격  |
+| inventory | integer | Y    | 잔여수량   |
+
+`프로세스`
+  - 상품 아이디로 상품 테이블에서 데이터 조회
+    - 상품 아이디가 없을 경우 Exception 발생
+    - 상품이 존재할 경우 `response`로 변환해서 반환함
+
+
+`CURL`
+```
+curl --location --request GET 'http://localhost:8080/products/1'
+```
+
+---
+
+## 주문
+
+### 상품 주문 API
+
+- 요구사항
+  - 사용자 식별자와 (상품 ID, 수량) 목록을 입력받아 주문하고 결제를 수행
+  - 결제는 기 충전된 잔액을 기반으로 수행하며 성공할 시 잔액을 차감해야 합니다.
+  - 데이터 분석을 위해 결제 성공 시에 실시간으로 주문 정보를 데이터 플랫폼에 전송해야 합니다.
+
+<br/>
+
+`Endpoint`
+```
+GET http://{host}/products/{id}
+```
+<br/>
+
+
+`Request` **Request Body**
+
+| 파라미터                   | 타입       | 필수여부 | 설명        |
+|------------------------|----------|------|-----------|
+| userId                 | integer  | Y    | 사용자 아이디   |
+| totalPrice             | integer  | Y    | 총 결제 금액   |
+| paymentType            | string   | Y    | 결제 타입     |
+| orderAt                | datetime | Y    | 결제 일시     |
+| OrderItems             | Array    | Y    | 주문 상품 리스트 |
+| OrderItems[].productId | integer  | Y    | 상품 아이디    |
+| OrderItems[].price     | price    | Y    | 결제 금액     |
+| OrderItems[].quantity  | quantity | Y    | 결제 수량     |
+
+
+`Response` **Response body**
+
+| 파라미터      | 타입      | 필수여부 | 설명     |
+|-----------|---------|------|--------|
+
+
+
+`프로세스`
+  - 성공일 경우 `200`
+  - 주문 요청에 총 결제 금액으로 지갑에서 차감 시도
+    - 잔액이 부족하면 `Exception` 발생
+    - 
+
+
+`CURL`
+```
+curl --location --request GET 'http://localhost:8080/products/1'
+
+```
+
+
+---
+
+## 사용자 지갑
+
+---
+
+## 장바구니
