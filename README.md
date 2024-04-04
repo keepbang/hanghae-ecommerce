@@ -30,6 +30,6 @@
 ![milestone](images/img.png)
 
 # ERD
-![erd.png](images/erd.png)
+![img.png](images/erd.png)
 
 # API Spec

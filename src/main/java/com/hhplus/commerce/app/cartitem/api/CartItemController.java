@@ -16,4 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/cart")
 public class CartItemController {
 
+  /**
+   * 장바구니 추가
+   */
+
+  /**
+   * 장바구니 삭제
+   */
+
+  /**
+   * 장바구니 조회
+   */
+
 }
