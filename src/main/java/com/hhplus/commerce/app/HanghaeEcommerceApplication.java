@@ -1,4 +1,4 @@
-package com.hhplus.commerce.hanghaeecommerce;
+package com.hhplus.commerce.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
