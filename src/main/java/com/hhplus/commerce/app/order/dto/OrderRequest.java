@@ -15,7 +15,6 @@ import java.util.List;
 public record OrderRequest(
     Long userId, // 사용자 아이디
     Long totalPrice, // 총 결제금액
-    String address, // 배송 주소
     PaymentType paymentType, // 결제 타입
     LocalDateTime orderAt, // 결제 일시
 

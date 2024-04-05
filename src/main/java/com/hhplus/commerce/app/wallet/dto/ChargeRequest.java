@@ -11,8 +11,7 @@ package com.hhplus.commerce.app.wallet.dto;
  */
 public record ChargeRequest(
     Long userId,
-    Long amount,
-    TransactionType type
+    Long amount
 ) {
 
 }
