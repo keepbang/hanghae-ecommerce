@@ -31,8 +31,80 @@
 ![milestone](images/img.png)
 
 # ERD
+![erd.png](erd.png)
+```mermaid
+erDiagram
+	USER {
+		user_id BIGINT PK
+		name varchar(100) 
+		address varchar(255)
+	}
+	
+	WALLET ||--O{ WALLET_HISTORY : history
+	WALLET {
+		id bigint PK
+		user_id bigint UK
+		balance bigint 
+		update_at datetime
+	}
+	
+	WALLET_HISTORY {
+		id bigint PK
+		user_id bigint
+		wallet_id bigint
+		type varchar(10)
+		amount bigint
+		created_at datetime
+	}
+	
+	ORDER ||--|{ORDER_ITEM : order
+	ORDER {
+		order_id UUID PK
+		user_id bigint
+		total_price bigint
+		product_quantity integer
+		address varchar(255)
+		payment_type varchar(20)
+		transaction_id varchar(36)
+		orderAt datetime
+	}
+	
+	PRODUCT ||--o{ ORDER_ITEM : is
+	ORDER_ITEM {
+		order_id UUID PK
+		product_id bigint PK
+		order_price bigint
+		order_quantity integer
+		order_status varchar(20)
+	}
 
-![img.png](images/erd.png)
+
+	INVENTORY ||--|| PRODUCT : is	
+	INVENTORY {
+		product_id bigint PK
+		stock integer
+		update_at datetime
+	}
+	
+	PRODUCT ||--o{ CART_ITEM : is
+	PRODUCT {
+		product_id bigint PK
+		name varchar(100)
+		total_stock integer
+		price bigint
+		updated_at datetime
+		created_at datetime
+	}
+	
+	CART_ITEM {
+		user_id UUID PK
+		product_id bigint
+		quantity integer
+		update_at datetime
+	}
+	
+```
+
 
 # API Spec
 
