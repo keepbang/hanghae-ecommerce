@@ -58,6 +58,40 @@
 - 요구사항
     - 상품 아이디로 상품 정보 및 잔여수량을 조회한다.
 
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+      actor client
+      participant app as application
+      participant product as database(product)
+      participant inventory as database(inventory)
+      client->>app: GET /products/{id}
+      activate app
+      
+      app->>product: 상품 조회
+      activate product
+      alt has product
+          product-->>app: 상품 데이터
+        else has not product
+            product-->>app: NotFoundException
+            app-->>client: 400 bad request
+           end
+      deactivate product
+      
+      app->>inventory: 재고 조회(상품 id)
+      activate inventory
+      alt has inventory
+          inventory-->>app: 상품 재고 데이터
+        else has not inventory
+            inventory-->>app: 재고 수량 0
+           end
+      deactivate inventory
+      
+      app-->>client: 200 OK<br>(재고가 포함된 상품 정보)
+      
+      deactivate app
+  ```
+
 <br/>
 
 `Endpoint`
@@ -82,6 +116,7 @@ GET http://{server_url}/products/{id}
 **Response Code**
 
 - `200 OK`
+- `400 bad request`
 
 **Response body**
 
