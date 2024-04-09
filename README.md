@@ -150,6 +150,51 @@ curl --location --request GET 'http://localhost:8080/products/1'
     - 결제는 기 충전된 잔액을 기반으로 수행하며 성공할 시 잔액을 차감해야 합니다.
     - 데이터 분석을 위해 결제 성공 시에 실시간으로 주문 정보를 데이터 플랫폼에 전송해야 합니다.
 
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+    actor client
+    participant app as application
+    participant inventory as database<br>(inventory)
+    participant order as database<br>(order)
+    participant orderItem as database<br>(order_item)
+    participant wallet as database<br>(wallet)
+    participant walletHistory as database<br>(wallet_history)
+    client->>app: POST /orders
+    activate app
+    
+    loop order item
+	    app->>inventory:상품 재고 조회
+      activate inventory
+	    inventory-->>app:상품 재고
+	    app->>app:상품 재고 차감 시도
+	    alt 현재 재고 < 주문한 상품 수량
+		    app-->>client:400 bad request(OutOfStockException)
+	    end
+	    app->>app:주문 아이템 생성
+	    app->>inventory:차감된 재고 적용
+    end
+    deactivate inventory
+    
+    app->>wallet: 총 결제 금액으로 지갑에서 차감
+    activate wallet
+    alt 총 결제 금액 <= 잔액
+	    wallet->>walletHistory:지갑 사용 이력 저장
+	  else 총 결제 금액 > 잔액
+	    wallet-->>client:400 bad request(BalanceException)
+	  end
+    deactivate wallet
+
+
+    
+    app->>app: 주문생성
+    app->>order:주문 저장
+    app->>orderItem:주문 아이템 저장
+    
+    app-->>client: 200 OK
+    deactivate app
+  ```
+
 <br/>
 
 `Endpoint`
@@ -186,7 +231,7 @@ POST http://{server_url}/orders
     - 남아있는 재고 수량을 초과하는 주문은 할 수 없다.
 - 주문 요청에 총 결제 금액으로 지갑에서 차감 시도
     - 잔액이 부족하면 `Exception` 발생
-- 성공일 경우 비동기(`@Async`)를 활용해 데이터 플랫폼에 결제 정보 전성
+- 성공일 경우 비동기(`@Async`)를 활용해 데이터 플랫폼에 결제 정보 전송
 - `200` 응답
 
 `CURL`
