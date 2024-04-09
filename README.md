@@ -266,6 +266,25 @@ curl --location --request POST 'http://localhost:8080/orders' \
     - 최근 3일간 가장 많이 팔린 상위 5개 상품 정보를 제공하는 API 작성.
     - 나중에 추천 타입이 추가될 경우를 대비해서 추천타입 사용 : `type`
     - 순위에 따라서 오름차순으로 정렬 되어야 한다.
+    - TODO : 통계 테이블을 만들어서 적용해보기
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+    actor client
+    participant app as application
+    participant orderItem as database<br>(order_item)
+    participant product as database<br>(product)
+    client->>app: GET /orders/{recommed_type}
+    activate app
+    app->>orderItem: 추천 타입별 상품 조회
+    orderItem-->>app: 추천된 상품 정보
+    loop 추천된 상품
+      app->>product: 상품별 메타정보 데이터 조회
+      product-->>app: 상품별 메타정보 맵핑(이름, 옵션...)
+    end
+    app-->>client: 200 OK<br>(추천된 상품 정보)
+    deactivate app
+  ```
 
 <br/>
 
@@ -322,6 +341,30 @@ curl --location --request GET 'http://localhost:8080/orders/RECOMMEND_01'
 
 - 요구사항
     - 사용자 식별자를 통해 해당 사용자의 잔액을 조회한다.
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+      actor client
+      participant app as application
+      participant wallet as database<br>(wallet)
+      client->>app:GET /wallet/users/{id}
+      activate app
+      
+      app->>wallet:지갑 테이블 조회
+      
+      alt 사용자에 대한 지갑 정보가 존재하지 않을 경우
+          wallet-->>app:잔액 0으로 반환
+      else 지갑 정보가 존재할 경우
+          wallet-->>app:지갑 정보 반환
+      end
+      
+      app-->>client:200 OK<br>(지갑 정보)
+      
+      deactivate app
+      
+      
+  ```
+
 
 <br/>
 
@@ -373,6 +416,28 @@ curl --location --request GET 'http://localhost:8080/wallet/users/1'
 
 - 요구사항
     - 사용자 식별자 및 충전할 금액을 받아 잔액 충전
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+      actor client
+      participant app as application
+      participant wallet as database<br>(wallet)
+      client->>app:PATCH /wallet/charge
+      activate app
+      
+      app->wallet:지갑 테이블 조회
+      wallet-->app:지갑 정보
+      alt 사용자에 대한 지갑 정보가 존재하지 않을 경우
+          app->>wallet: 충전 금액으로 지갑 데이터 저장
+      else 지갑 정보가 존재할 경우
+          app->>wallet: 지갑 잔액에 입력받은 금액 추가
+      end
+      app-->>client:200 OK
+      
+      deactivate app
+      
+      
+  ```
 
 <br/>
 
@@ -430,7 +495,21 @@ curl --location --request PATCH 'http://localhost:8080/wallet/charge' \
     - 사용자가 장바구니에 상품을 추가하는 API
     - 수량에 `0`이 들어올 경우 삭제를 한다.
     - 사용자별 상품은 하나만 장바구니에 추가 할 수 있다.
-
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+  actor client
+  participant app as application
+  participant cart as database<br>(cart_item)
+  
+  client->>app: PUT /carts
+  activate app
+  
+  app->>cart: 장바구니 데이터 저장<br>(insert or update)
+  
+  app-->>client: 200 OK
+  deactivate app
+  ```
 <br/>
 
 `Endpoint`
@@ -481,7 +560,22 @@ curl --location --request PUT 'http://localhost:8080/carts' \
 
 - 요구사항
     - 장바구니에 상품을 삭제하는
-
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+  actor client
+  participant app as application
+  participant cart as database<br>(cart_item)
+  
+  client->>app: DELETE /carts/users/{userId}/products/{productId}
+  activate app
+  
+  app->>cart: 장바구니 데이터 삭제
+  
+  app-->>client: 200 OK
+  deactivate app
+  
+  ```
 <br/>
 
 `Endpoint`
@@ -523,7 +617,30 @@ curl --location --request DELETE 'http://localhost:8080/carts/users/1/products/1
 - 요구사항
     - 특정 사용자의 장바구니에 담긴 상품을 조회
     - 조회할때 상품 이름과 가격도 같이 조회한다.
-
+- 시퀀스 다이어그램
+  ```mermaid
+  sequenceDiagram
+  actor client
+  participant app as application
+  participant cart as database<br>(cart_item)
+  participant product as database<br>(product)
+  
+  client->>app: GET /carts/users/{userId}
+  activate app
+  
+  app->>cart: 특정 사용자 장바구니 데이터 조회
+  cart-->>app: 장바구니 데이터
+  
+  loop cart item
+      app->>product: 장바구니 상품 조회
+      product-->>app: 장바구니 상품 메타데이터 맵핑
+  end
+  
+  app-->>client: 200 OK<br>(장바구니 상품 목록)
+  deactivate app
+  
+  ```
+  
 <br/>
 
 `Endpoint`
