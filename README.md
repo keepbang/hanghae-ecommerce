@@ -31,7 +31,6 @@
 ![milestone](images/img.png)
 
 # ERD
-![erd.png](erd.png)
 ```mermaid
 erDiagram
 	USER {
@@ -83,7 +82,6 @@ erDiagram
 	INVENTORY ||--|| PRODUCT : is	
 	INVENTORY {
 		product_id bigint PK
-		total_stock integer
 		stock integer
 		created_at datetime
 		update_at datetime
@@ -200,7 +198,7 @@ GET http://{server_url}/products/{id}
 | productId | integer | Y    | 상품 아이디 |
 | name      | string  | Y    | 상품 이름  |
 | price     | integer | Y    | 상품 가격  |
-| inventory | integer | Y    | 잔여수량   |
+| stock     | integer | Y    | 잔여수량   |
 
 `프로세스`
 
