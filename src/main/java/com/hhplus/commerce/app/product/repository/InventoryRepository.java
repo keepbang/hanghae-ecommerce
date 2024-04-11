@@ -1,0 +1,19 @@
+package com.hhplus.commerce.app.product.repository;
+
+import com.hhplus.commerce.app.product.domain.Inventory;
+
+/**
+ * create on 4/11/24. create by IntelliJ IDEA.
+ *
+ * <p> 클래스 설명 </p>
+ *
+ * @author Gibyung Chae (Keepbang)
+ * @version 1.0
+ * @since 1.0
+ */
+public interface InventoryRepository {
+
+  Inventory findById(Long productId);
+
+  Inventory save(Inventory inventory);
+}
