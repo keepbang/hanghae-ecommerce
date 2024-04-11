@@ -31,7 +31,6 @@
 ![milestone](images/img.png)
 
 # ERD
-![erd.png](erd.png)
 ```mermaid
 erDiagram
 	USER {
