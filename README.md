@@ -44,7 +44,8 @@ erDiagram
 	WALLET {
 		id bigint PK
 		user_id bigint UK
-		balance bigint 
+		balance bigint
+		created_at datetime
 		update_at datetime
 	}
 	
@@ -82,7 +83,9 @@ erDiagram
 	INVENTORY ||--|| PRODUCT : is	
 	INVENTORY {
 		product_id bigint PK
+		total_stock integer
 		stock integer
+		created_at datetime
 		update_at datetime
 	}
 	
@@ -90,7 +93,6 @@ erDiagram
 	PRODUCT {
 		product_id bigint PK
 		name varchar(100)
-		total_stock integer
 		price bigint
 		updated_at datetime
 		created_at datetime
@@ -100,6 +102,7 @@ erDiagram
 		user_id UUID PK
 		product_id bigint
 		quantity integer
+		created_at datetime
 		update_at datetime
 	}
 	
