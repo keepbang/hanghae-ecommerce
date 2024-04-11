@@ -1,8 +1,7 @@
 package com.hhplus.commerce.app.product.repository;
 
-import com.hhplus.commerce.app.common.exception.OutOfStockException;
+import com.hhplus.commerce.app.common.exception.NotFoundException;
 import com.hhplus.commerce.app.product.domain.Product;
-import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -31,6 +30,6 @@ public class ProductRepositoryImpl implements ProductRepository {
   @Override
   public Product findByIdOrThrows(Long id) {
     return productJpaRepository.findById(id)
-        .orElseThrow(OutOfStockException::new);
+        .orElseThrow(NotFoundException::new);
   }
 }

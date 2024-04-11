@@ -11,6 +11,7 @@ package com.hhplus.commerce.app.common.exception;
  */
 public enum ErrorMessage {
 
+  NOT_FOUND_MESSAGE("데이터를 찾을 수 없습니다."),
   OUT_OF_STOCK_MESSAGE("상품 재고가 부족합니다.");
 
   private String message;
