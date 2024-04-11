@@ -83,7 +83,6 @@ erDiagram
 	INVENTORY ||--|| PRODUCT : is	
 	INVENTORY {
 		product_id bigint PK
-		total_stock integer
 		stock integer
 		created_at datetime
 		update_at datetime
