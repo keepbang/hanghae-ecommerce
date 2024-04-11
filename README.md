@@ -199,7 +199,7 @@ GET http://{server_url}/products/{id}
 | productId | integer | Y    | 상품 아이디 |
 | name      | string  | Y    | 상품 이름  |
 | price     | integer | Y    | 상품 가격  |
-| inventory | integer | Y    | 잔여수량   |
+| stock     | integer | Y    | 잔여수량   |
 
 `프로세스`
 
