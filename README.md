@@ -26,6 +26,27 @@
 
 ---
 
+# 목차
+
+- [Milestone](#milestone)
+- [ERD](#erd)
+- [Swagger 화면](#swagger-ui)
+- 상품
+  - [상품 조회 API](#상품-조회-api)
+- 주문
+  - [상품 주문 API](#상품-주문-api)
+  - [상위 상품 조회 API](#상위-상품-조회-api)
+- 사용자 지갑
+  - [특정 사용자 잔액 조회 API](#특정-사용자-잔액-조회-api)
+  - [특정 사용자 잔액 충전 API](#특정-사용자-잔액-충전-api)
+- 장바구니
+  - [장바구니 추가(수량 변경) API](#장바구니-추가수량-변경-api)
+  - [장바구니 상품 삭제 API](#장바구니-상품-삭제-api)
+  - [장바구니 상품 조회 API](#장바구니-상품-조회-api)
+
+
+---
+
 # Milestone
 
 ![milestone](images/img.png)
@@ -106,20 +127,15 @@ update_at datetime
 
 ```
 
-# API Spec
+<br/>
 
-- 상품
-    - [상품 조회 API](#상품-조회-api)
-- 주문
-    - [상품 주문 API](#상품-주문-api)
-    - [상위 상품 조회 API](#상위-상품-조회-api)
-- 사용자 지갑
-    - [특정 사용자 잔액 조회 API](#특정-사용자-잔액-조회-api)
-    - [특정 사용자 잔액 충전 API](#특정-사용자-잔액-충전-api)
-- 장바구니
-    - [장바구니 추가(수량 변경) API](#장바구니-추가수량-변경-api)
-    - [장바구니 상품 삭제 API](#장바구니-상품-삭제-api)
-    - [장바구니 상품 조회 API](#장바구니-상품-조회-api)
+# Swagger UI
+![swagger_ui.png](images/swagger_ui.png)
+
+<br/>
+
+
+# API Spec
 
 ---
 
@@ -163,11 +179,6 @@ update_at datetime
       
       deactivate app
   ```
-
-<br/>
-
-- Swagger UI 적용
-  ![swagger_ui.png](images/swagger_ui.png)
 
 <br/>
 
