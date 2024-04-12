@@ -1,6 +1,7 @@
 package com.hhplus.commerce.app.order.repository;
 
 import com.hhplus.commerce.app.order.domain.OrderItem;
+import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -23,5 +24,10 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
   @Override
   public void saveAll(List<OrderItem> orderItems) {
     orderItemJpaRepository.saveAll(orderItems);
+  }
+
+  @Override
+  public List<RecommendProductResponse> getRecommendProduct() {
+    return null;
   }
 }

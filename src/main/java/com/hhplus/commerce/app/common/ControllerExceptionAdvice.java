@@ -42,4 +42,11 @@ public class ControllerExceptionAdvice {
     return ResponseEntity.badRequest().body(errorResponse);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorResponse> handleIllegalArgumentException(Exception e) {
+    log.error("error: ", e);
+    ErrorResponse errorResponse = new ErrorResponse("400", e.getMessage());
+    return ResponseEntity.badRequest().body(errorResponse);
+  }
+
 }
