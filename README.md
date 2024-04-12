@@ -167,7 +167,7 @@ update_at datetime
 <br/>
 
 - Swagger UI 적용
-  ![swagger_ui.png](swagger_ui.png)
+  ![swagger_ui.png](images/swagger_ui.png)
 
 <br/>
 
