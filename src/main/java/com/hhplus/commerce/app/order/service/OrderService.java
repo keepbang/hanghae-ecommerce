@@ -1,10 +1,12 @@
 package com.hhplus.commerce.app.order.service;
 
 import com.hhplus.commerce.app.common.type.OrderStatus;
+import com.hhplus.commerce.app.common.type.RecommendType;
 import com.hhplus.commerce.app.order.domain.Order;
 import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.domain.OrderItemId;
 import com.hhplus.commerce.app.order.dto.OrderRequest;
+import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
 import com.hhplus.commerce.app.order.repository.OrderItemRepository;
 import com.hhplus.commerce.app.order.repository.OrderRepository;
 import com.hhplus.commerce.app.product.service.InventoryService;
@@ -33,9 +35,10 @@ public class OrderService {
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
 
-
   private final WalletService walletService;
   private final InventoryService inventoryService;
+
+  private final DataPlatformSender dataPlatformSender;
 
   @Transactional
   public void order(OrderRequest request) {
@@ -80,6 +83,15 @@ public class OrderService {
 
     orderItemRepository.saveAll(itemList);
 
+    // 데이터 플랫폼 전달
+    dataPlatformSender.send(request);
+
+  }
+
+  public List<RecommendProductResponse> getRecommendProduct(RecommendType type) {
+    return switch(type) {
+      case RECOMMEND_01 -> orderItemRepository.getRecommendProduct();
+    };
   }
 
 }
