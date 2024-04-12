@@ -51,7 +51,6 @@ erDiagram
 	WALLET_HISTORY {
 		id bigint PK
 		user_id bigint
-		wallet_id bigint
 		type varchar(10)
 		amount bigint
 		created_at datetime
