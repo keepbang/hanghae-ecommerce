@@ -2,7 +2,10 @@ package com.hhplus.commerce.app.wallet.api;
 
 import com.hhplus.commerce.app.wallet.dto.ChargeRequest;
 import com.hhplus.commerce.app.wallet.dto.WalletResponse;
+import com.hhplus.commerce.app.wallet.service.WalletService;
 import java.time.LocalDateTime;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,19 +26,22 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/wallet")
+@RequiredArgsConstructor
 public class WalletController {
+
+  private final WalletService walletService;
 
   /**
    * 특정 사용자 잔액 조회.
    *
-   * @param id 사용자 아이디.
+   * @param userKey 사용자 아이디(uuid).
    * @return 잔액 정보 response.
    */
-  @GetMapping("/users/{id}")
+  @GetMapping("/users/{key}")
   public ResponseEntity<WalletResponse> getUserWallet(
-      @PathVariable("id") Long id) {
+      @PathVariable("key") UUID userKey) {
     return new ResponseEntity<>(
-        new WalletResponse(id, 10000L, LocalDateTime.now()),
+        walletService.getUserWallet(userKey),
         HttpStatus.OK
     );
   }
@@ -49,7 +55,7 @@ public class WalletController {
   public ResponseEntity<Void> charge(
       @RequestBody ChargeRequest request
   ) {
-    // todo : 충전 및 충전 history 저장
+    walletService.charge(request);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

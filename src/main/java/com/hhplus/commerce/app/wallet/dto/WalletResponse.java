@@ -1,6 +1,7 @@
 package com.hhplus.commerce.app.wallet.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * create on 4/4/24. create by IntelliJ IDEA.
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
  * @since 1.0
  */
 public record WalletResponse(
-    Long userId,
+    UUID userKey,
     Long balance,
     LocalDateTime updateAt
 ) {

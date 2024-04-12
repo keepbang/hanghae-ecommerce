@@ -3,6 +3,7 @@ package com.hhplus.commerce.app.product.api;
 import com.hhplus.commerce.app.product.dto.ProductRequest;
 import com.hhplus.commerce.app.product.dto.ProductResponse;
 import com.hhplus.commerce.app.product.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
 
   private final ProductService productService;
 
-  public ProductController(ProductService productService) {
-    this.productService = productService;
-  }
 
   /**
    * 특정 상품 조회.

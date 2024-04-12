@@ -8,6 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * create on 4/4/24. create by IntelliJ IDEA.
@@ -20,6 +23,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "product")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends AuditEntity {
 
   @Id
@@ -32,9 +37,6 @@ public class Product extends AuditEntity {
   @Column(nullable = false)
   private Long price;
 
-  protected Product() {
-  }
-
   public Product(Long productId, String name, Long price) {
     this.productId = productId;
     this.name = name;
@@ -44,17 +46,5 @@ public class Product extends AuditEntity {
   public Product(String name, Long price) {
     this.name = name;
     this.price = price;
-  }
-
-  public Long getProductId() {
-    return productId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public Long getPrice() {
-    return price;
   }
 }

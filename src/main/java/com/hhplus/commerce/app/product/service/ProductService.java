@@ -10,6 +10,7 @@ import com.hhplus.commerce.app.product.repository.ProductJpaRepository;
 import com.hhplus.commerce.app.product.repository.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,18 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0
  */
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProductService {
 
   private final ProductRepository productRepository;
   private final InventoryRepository inventoryRepository;
 
-  public ProductService(
-      ProductRepository productRepository,
-      InventoryRepository inventoryRepository) {
-    this.productRepository = productRepository;
-    this.inventoryRepository = inventoryRepository;
-  }
 
   @Transactional
   public void save(ProductRequest request) {

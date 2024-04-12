@@ -3,7 +3,7 @@ package com.hhplus.commerce.app.wallet.dto;
 import java.util.UUID;
 
 /**
- * create on 4/4/24. create by IntelliJ IDEA.
+ * create on 4/12/24. create by IntelliJ IDEA.
  *
  * <p> 클래스 설명 </p>
  *
@@ -11,9 +11,9 @@ import java.util.UUID;
  * @version 1.0
  * @since 1.0
  */
-public record ChargeRequest(
+public record UseRequest(
     UUID userKey,
     Long amount
-) {
+){
 
 }

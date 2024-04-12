@@ -2,8 +2,10 @@ package com.hhplus.commerce.app.order.api;
 
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
 import com.hhplus.commerce.app.order.dto.OrderRequest;
-import com.hhplus.commerce.app.order.dto.RecommendType;
+import com.hhplus.commerce.app.common.type.RecommendType;
+import com.hhplus.commerce.app.order.service.OrderService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
+
+  private final OrderService orderService;
 
   /**
    * 상품 주문.
@@ -35,7 +40,7 @@ public class OrderController {
   public ResponseEntity<Void> orderItems(
       @RequestBody OrderRequest request
   ) {
-    // todo : 주문 처리 후 history 저장까지 해야함.
+    orderService.order(request);
     return new ResponseEntity<>(
         HttpStatus.OK
     );
@@ -45,7 +50,7 @@ public class OrderController {
    * 상위 상품 조회 API. 최근 3일간 가장 많이 팔린 상위 5개 상품 정보 조회. 타입에 따라 조회.
    * todo : 통계 db를 구축해서 따로 조회를 해도 될 것 같음.
    */
-  @GetMapping("/{type}")
+  @GetMapping("/recommend/{type}")
   public ResponseEntity<List<RecommendProductResponse>> getRecommendOrderByType(
       @PathVariable("type") RecommendType type
   ) {

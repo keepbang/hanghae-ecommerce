@@ -1,11 +1,13 @@
-package com.hhplus.commerce.app.product.repository;
+package com.hhplus.commerce.app.wallet.repository;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import com.hhplus.commerce.app.common.exception.NotFoundException;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * create on 4/11/24. create by IntelliJ IDEA.
+ * create on 4/12/24. create by IntelliJ IDEA.
  *
  * <p> 클래스 설명 </p>
  *
@@ -23,26 +25,27 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @since 1.0
  */
 @ExtendWith(MockitoExtension.class)
-class ProductRepositoryImplTest {
+class UserRepositoryImplTest {
 
   @Mock
-  private ProductJpaRepository productJpaRepository;
+  private UserJpaRepository userJpaRepository;
 
   @InjectMocks
-  private ProductRepositoryImpl productRepository;
+  private UserRepositoryImpl userRepository;
 
   @Test
-  @DisplayName("찾는 상품이 없을 경우 exception")
-  public void findById_NotFound() throws Exception {
+  @DisplayName("사용자가 없을 경우 exception")
+  public void findByUserKey_NotFound() throws Exception {
     //given
-    given(productJpaRepository.findById(anyLong()))
+    given(userJpaRepository.findByUserKey(any()))
         .willReturn(Optional.empty());
 
     //when
     //then
-    assertThatThrownBy(() -> productRepository.findByIdOrThrows(1L))
+    assertThatThrownBy(() -> userRepository.findByUserKeyOrThrows(UUID.randomUUID()))
         .isInstanceOf(NotFoundException.class);
 
   }
+
 
 }

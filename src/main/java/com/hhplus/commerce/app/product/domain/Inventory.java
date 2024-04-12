@@ -6,6 +6,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * create on 4/11/24. create by IntelliJ IDEA.
@@ -18,6 +21,8 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "inventory")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Inventory extends AuditEntity {
 
   @Id
@@ -27,20 +32,10 @@ public class Inventory extends AuditEntity {
   @Column(name = "current_stock")
   private Integer currentStock;
 
-  protected Inventory() {
-  }
 
   public Inventory(Long productId, Integer currentStock) {
     this.productId = productId;
     this.currentStock = currentStock;
-  }
-
-  public Long getProductId() {
-    return productId;
-  }
-
-  public Integer getCurrentStock() {
-    return currentStock;
   }
 
   // 재고 차감

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * @since 1.0
  */
 public record CartItemRequest(
-    Long userId, // 사용자 아이디.
+    Long userKey, // 사용자 아이디.
     Long productId, // 상품 아이디.
     Integer quantity, // 상품 수량.
     LocalDateTime eventAt // 이벤트 발생 시간.

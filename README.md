@@ -31,96 +31,96 @@
 ![milestone](images/img.png)
 
 # ERD
+
 ```mermaid
 erDiagram
-	USER {
-		user_id BIGINT PK
-		name varchar(100) 
-		address varchar(255)
-	}
-	
-	WALLET ||--O{ WALLET_HISTORY : history
-	WALLET {
-		id bigint PK
-		user_id bigint UK
-		balance bigint
-		created_at datetime
-		update_at datetime
-	}
-	
-	WALLET_HISTORY {
-		id bigint PK
-		user_id bigint
-		wallet_id bigint
-		type varchar(10)
-		amount bigint
-		created_at datetime
-	}
-	
-	ORDER ||--|{ORDER_ITEM : order
-	ORDER {
-		order_id UUID PK
-		user_id bigint
-		total_price bigint
-		product_quantity integer
-		address varchar(255)
-		payment_type varchar(20)
-		transaction_id varchar(36)
-		orderAt datetime
-	}
-	
-	PRODUCT ||--o{ ORDER_ITEM : is
-	ORDER_ITEM {
-		order_id UUID PK
-		product_id bigint PK
-		order_price bigint
-		order_quantity integer
-		order_status varchar(20)
-	}
+    USER {
+        user_id BIGINT PK
+        name varchar(100)
+        address varchar(255)
+    }
+
+    WALLET ||--O { WALLET_HISTORY : history
+WALLET {
+id bigint PK
+user_id bigint UK
+balance bigint
+created_at datetime
+update_at datetime
+}
+
+WALLET_HISTORY {
+id bigint PK
+user_id bigint
+wallet_id bigint
+type varchar(10)
+amount bigint
+created_at datetime
+}
+
+ORDER ||--|{ORDER_ITEM: order
+ORDER {
+order_id UUID PK
+user_id bigint
+total_price bigint
+product_quantity integer
+address varchar(255)
+payment_type varchar(20)
+transaction_id varchar(36)
+orderAt datetime
+}
+
+PRODUCT ||--o{ ORDER_ITEM: is
+ORDER_ITEM {
+order_id UUID PK
+product_id bigint PK
+order_price bigint
+order_quantity integer
+order_status varchar(20)
+}
 
 
-	INVENTORY ||--|| PRODUCT : is	
-	INVENTORY {
-		product_id bigint PK
-		stock integer
-		created_at datetime
-		update_at datetime
-	}
-	
-	PRODUCT ||--o{ CART_ITEM : is
-	PRODUCT {
-		product_id bigint PK
-		name varchar(100)
-		price bigint
-		updated_at datetime
-		created_at datetime
-	}
-	
-	CART_ITEM {
-		user_id UUID PK
-		product_id bigint
-		quantity integer
-		created_at datetime
-		update_at datetime
-	}
-	
+INVENTORY ||--|| PRODUCT: is
+INVENTORY {
+product_id bigint PK
+stock integer
+created_at datetime
+update_at datetime
+}
+
+PRODUCT ||--o{ CART_ITEM: is
+PRODUCT {
+product_id bigint PK
+name varchar(100)
+price bigint
+updated_at datetime
+created_at datetime
+}
+
+CART_ITEM {
+user_id UUID PK
+product_id bigint
+quantity integer
+created_at datetime
+update_at datetime
+}
+
 ```
-
 
 # API Spec
 
 - 상품
-  - [상품 조회 API](#상품-조회-api)
+    - [상품 조회 API](#상품-조회-api)
 - 주문
-  - [상품 주문 API](#상품-주문-api)
-  - [상위 상품 조회 API](#상위-상품-조회-api)
+    - [상품 주문 API](#상품-주문-api)
+    - [상위 상품 조회 API](#상위-상품-조회-api)
 - 사용자 지갑
-  - [특정 사용자 잔액 조회 API](#특정-사용자-잔액-조회-api)
-  - [특정 사용자 잔액 충전 API](#특정-사용자-잔액-충전-api)
+    - [특정 사용자 잔액 조회 API](#특정-사용자-잔액-조회-api)
+    - [특정 사용자 잔액 충전 API](#특정-사용자-잔액-충전-api)
 - 장바구니
-  - [장바구니 추가(수량 변경) API](#장바구니-추가수량-변경-api)
-  - [장바구니 상품 삭제 API](#장바구니-상품-삭제-api)
-  - [장바구니 상품 조회 API](#장바구니-상품-조회-api)
+    - [장바구니 추가(수량 변경) API](#장바구니-추가수량-변경-api)
+    - [장바구니 상품 삭제 API](#장바구니-상품-삭제-api)
+    - [장바구니 상품 조회 API](#장바구니-상품-조회-api)
 
 ---
 
@@ -167,6 +167,11 @@ erDiagram
 
 <br/>
 
+- Swagger UI 적용
+  ![swagger_ui.png](swagger_ui.png)
+
+<br/>
+
 `Endpoint`
 
 ```
@@ -198,7 +203,7 @@ GET http://{server_url}/products/{id}
 | productId | integer | Y    | 상품 아이디 |
 | name      | string  | Y    | 상품 이름  |
 | price     | integer | Y    | 상품 가격  |
-| stock     | integer | Y    | 잔여수량   |
+| stock    | integer | Y    | 잔여수량   |
 
 `프로세스`
 
@@ -228,13 +233,21 @@ curl --location --request GET 'http://localhost:8080/products/1'
   sequenceDiagram
     actor client
     participant app as application
-    participant inventory as database<br>(inventory)
-    participant order as database<br>(order)
-    participant orderItem as database<br>(order_item)
-    participant wallet as database<br>(wallet)
-    participant walletHistory as database<br>(wallet_history)
+    participant inventory
+    participant order
+    participant wallet
+    participant walletHistory
     client->>app: POST /orders
     activate app
+  
+    app->>wallet: 총 결제 금액으로 지갑에서 차감
+    activate wallet
+    alt 총 결제 금액 <= 잔액
+	    wallet->>walletHistory:지갑 사용 이력 저장
+	  else 총 결제 금액 > 잔액
+	    wallet-->>client:400 bad request(BalanceException)
+	  end
+    deactivate wallet
     
     loop order item
 	    app->>inventory:상품 재고 조회
@@ -248,21 +261,11 @@ curl --location --request GET 'http://localhost:8080/products/1'
 	    app->>inventory:차감된 재고 적용
     end
     deactivate inventory
-    
-    app->>wallet: 총 결제 금액으로 지갑에서 차감
-    activate wallet
-    alt 총 결제 금액 <= 잔액
-	    wallet->>walletHistory:지갑 사용 이력 저장
-	  else 총 결제 금액 > 잔액
-	    wallet-->>client:400 bad request(BalanceException)
-	  end
-    deactivate wallet
 
 
     
     app->>app: 주문생성
     app->>order:주문 저장
-    app->>orderItem:주문 아이템 저장
     
     app-->>client: 200 OK
     deactivate app
@@ -283,7 +286,7 @@ POST http://{server_url}/orders
 
 | 파라미터                   | 타입       | 필수여부 | 설명              |
 |------------------------|----------|------|-----------------|
-| userId                 | integer  | Y    | 사용자 아이디         |
+| userId                 | string   | Y    | 사용자 아이디(uuid)   |
 | totalPrice             | integer  | Y    | 총 결제 금액         |
 | paymentType            | string   | Y    | 결제 타입(`WALLET`) |
 | orderAt                | datetime | Y    | 결제 일시           |
@@ -419,9 +422,19 @@ curl --location --request GET 'http://localhost:8080/orders/RECOMMEND_01'
   sequenceDiagram
       actor client
       participant app as application
-      participant wallet as database<br>(wallet)
-      client->>app:GET /wallet/users/{id}
+      participant user
+      participant wallet
+      client->>app:GET /wallet/users/{key}
       activate app
+  
+      app->>user:사용자 정보 조회
+      alt 사용자 정보가 존재하지 않을 경우
+          user-->>app:NotFoundException
+          app-->>client:400 bad request
+      else 사용자 정보가 존재할 경우
+          user-->>app:사용자 정보 반환
+      end
+  
       
       app->>wallet:지갑 테이블 조회
       
@@ -438,7 +451,6 @@ curl --location --request GET 'http://localhost:8080/orders/RECOMMEND_01'
       
   ```
 
-
 <br/>
 
 `Endpoint`
@@ -454,9 +466,9 @@ GET http://{server_url}/wallet/users/{id}
 
 **Path Variable**
 
-| 파라미터 | 타입      | 필수여부 | 설명      |
-|------|---------|------|---------|
-| id   | integer | Y    | 사용자 아이디 |
+| 파라미터 | 타입     | 필수여부 | 설명            |
+|------|--------|------|---------------|
+| id   | string | Y    | 사용자 아이디(uuid) |
 
 `Response`
 
@@ -466,11 +478,11 @@ GET http://{server_url}/wallet/users/{id}
 
 **Response body**
 
-| 파라미터     | 타입      | 필수여부 | 설명          |
-|----------|---------|------|-------------|
-| userId   | integer | Y    | 사용자 아이디     |
-| balance  | integer | Y    | 잔액          |
-| updateAt | integer | N    | 마지막 업데이트 일시 |
+| 파라미터     | 타입      | 필수여부 | 설명            |
+|----------|---------|------|---------------|
+| userId   | string  | Y    | 사용자 아이디(uuid) |
+| balance  | integer | Y    | 잔액            |
+| updateAt | integer | N    | 마지막 업데이트 일시   |
 
 `프로세스`
 
@@ -527,10 +539,10 @@ PATCH http://{server_url}/wallet/charge
 
 **Request Body**
 
-| 파라미터   | 타입      | 필수여부 | 설명      |
-|--------|---------|------|---------|
-| userId | integer | Y    | 사용자 아이디 |
-| amount | integer | Y    | 충전 금액   |
+| 파라미터   | 타입      | 필수여부 | 설명            |
+|--------|---------|------|---------------|
+| userId | string  | Y    | 사용자 아이디(uuid) |
+| amount | integer | Y    | 충전 금액         |
 
 `Response`
 
@@ -583,6 +595,7 @@ curl --location --request PATCH 'http://localhost:8080/wallet/charge' \
   app-->>client: 200 OK
   deactivate app
   ```
+
 <br/>
 
 `Endpoint`
@@ -649,6 +662,7 @@ curl --location --request PUT 'http://localhost:8080/carts' \
   deactivate app
   
   ```
+
 <br/>
 
 `Endpoint`
@@ -713,7 +727,7 @@ curl --location --request DELETE 'http://localhost:8080/carts/users/1/products/1
   deactivate app
   
   ```
-  
+
 <br/>
 
 `Endpoint`

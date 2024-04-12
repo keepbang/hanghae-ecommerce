@@ -1,4 +1,4 @@
-package com.hhplus.commerce.app.wallet.dto;
+package com.hhplus.commerce.app.common.type;
 
 /**
  * create on 4/4/24. create by IntelliJ IDEA.

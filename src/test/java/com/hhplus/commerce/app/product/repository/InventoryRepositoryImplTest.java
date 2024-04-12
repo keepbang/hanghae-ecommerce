@@ -1,18 +1,17 @@
 package com.hhplus.commerce.app.product.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 import com.hhplus.commerce.app.product.domain.Inventory;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * create on 4/11/24. create by IntelliJ IDEA.
@@ -23,9 +22,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
  * @version 1.0
  * @since 1.0
  */
+@ExtendWith(MockitoExtension.class)
 class InventoryRepositoryImplTest {
 
-  @MockBean
+  @Mock
   private InventoryJpaRepository inventoryJpaRepository;
 
   @InjectMocks
