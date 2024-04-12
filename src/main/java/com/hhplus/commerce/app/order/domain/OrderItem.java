@@ -6,7 +6,9 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,12 @@ import lombok.NoArgsConstructor;
  * @since 1.0
  */
 @Entity
-@Table(name = "order_item")
+@Table(name = "order_item",
+    indexes = @Index(
+        name = "idx_status_order_at",
+        columnList = "order_status,order_at"
+    )
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
@@ -39,11 +46,15 @@ public class OrderItem {
   @Enumerated(value = EnumType.STRING)
   private OrderStatus orderStatus;
 
-  public OrderItem(OrderItemId orderItemId, Long price, Integer quantity, OrderStatus orderStatus) {
+  private LocalDateTime orderAt;
+
+  public OrderItem(OrderItemId orderItemId, Long price, Integer quantity, OrderStatus orderStatus,
+      LocalDateTime orderAt) {
     this.orderItemId = orderItemId;
     this.price = price;
     this.quantity = quantity;
     this.orderStatus = orderStatus;
+    this.orderAt = orderAt;
   }
 
 }

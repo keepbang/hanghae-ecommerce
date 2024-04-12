@@ -12,6 +12,7 @@ import com.hhplus.commerce.app.order.repository.OrderRepository;
 import com.hhplus.commerce.app.product.service.InventoryService;
 import com.hhplus.commerce.app.wallet.dto.UseRequest;
 import com.hhplus.commerce.app.wallet.service.WalletService;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +78,8 @@ public class OrderService {
             ),
             item.price(),
             item.quantity(),
-            OrderStatus.ORDER_COMPLETED
+            OrderStatus.PAID,
+            request.orderAt()
         ))
         .toList();
 
@@ -90,7 +92,11 @@ public class OrderService {
 
   public List<RecommendProductResponse> getRecommendProduct(RecommendType type) {
     return switch(type) {
-      case RECOMMEND_01 -> orderItemRepository.getRecommendProduct();
+      case RECOMMEND_01 -> orderItemRepository.getRecommendProduct(
+          OrderStatus.ORDER_COMPLETED,
+          LocalDateTime.now().minusDays(3L),
+          LocalDateTime.now()
+      );
     };
   }
 

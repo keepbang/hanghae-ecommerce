@@ -1,7 +1,9 @@
 package com.hhplus.commerce.app.order.repository;
 
+import com.hhplus.commerce.app.common.type.OrderStatus;
 import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,7 +29,15 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
   }
 
   @Override
-  public List<RecommendProductResponse> getRecommendProduct() {
-    return null;
+  public List<RecommendProductResponse> getRecommendProduct(
+      OrderStatus status,
+      LocalDateTime startAt,
+      LocalDateTime endAt
+  ) {
+    return orderItemJpaRepository.getRecommendProduct(
+        status,
+        startAt,
+        endAt
+    );
   }
 }

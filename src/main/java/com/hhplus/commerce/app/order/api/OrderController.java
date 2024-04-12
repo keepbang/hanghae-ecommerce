@@ -55,13 +55,7 @@ public class OrderController {
       @PathVariable("type") RecommendType type
   ) {
     return new ResponseEntity<>(
-        List.of(
-            new RecommendProductResponse(1, 3L, "맥북 프로 16인치", 20L),
-            new RecommendProductResponse(2, 4L, "가습기", 15L),
-            new RecommendProductResponse(3, 1L, "마우스", 12L),
-            new RecommendProductResponse(4, 2L, "키보드", 10L),
-            new RecommendProductResponse(5, 7L, "스타벅스텀블러", 5L)
-        ),
+        orderService.getRecommendProduct(type),
         HttpStatus.OK
     );
   }

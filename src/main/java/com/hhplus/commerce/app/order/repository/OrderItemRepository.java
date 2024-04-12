@@ -1,7 +1,9 @@
 package com.hhplus.commerce.app.order.repository;
 
+import com.hhplus.commerce.app.common.type.OrderStatus;
 import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -17,6 +19,10 @@ public interface OrderItemRepository {
 
   void saveAll(List<OrderItem> orderItems);
 
-  List<RecommendProductResponse> getRecommendProduct();
+  List<RecommendProductResponse> getRecommendProduct(
+      OrderStatus status,
+      LocalDateTime startAt,
+      LocalDateTime endAt
+  );
 
 }
