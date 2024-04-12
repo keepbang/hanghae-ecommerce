@@ -40,7 +40,7 @@ erDiagram
         address varchar(255)
     }
 
-    WALLET ||--O { WALLET_HISTORY : history
+WALLET ||--O{ WALLET_HISTORY : history
 WALLET {
 id bigint PK
 user_id bigint UK
