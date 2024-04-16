@@ -93,7 +93,7 @@ public class OrderService {
   public List<RecommendProductResponse> getRecommendProduct(RecommendType type) {
     return switch(type) {
       case RECOMMEND_01 -> orderItemRepository.getRecommendProduct(
-          OrderStatus.ORDER_COMPLETED,
+          OrderStatus.PAID,
           LocalDateTime.now().minusDays(3L),
           LocalDateTime.now()
       );

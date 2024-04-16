@@ -4,6 +4,7 @@ import com.hhplus.commerce.app.common.type.OrderStatus;
 import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.domain.QOrderItem;
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
+import com.hhplus.commerce.app.product.domain.QProduct;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -37,12 +38,16 @@ public class RecommendProductRepository extends QuerydslRepositorySupport {
   public List<RecommendProductResponse> getRecommendProduct(OrderStatus status,
       LocalDateTime startAt, LocalDateTime endAt) {
     QOrderItem orderItem = QOrderItem.orderItem;
+    QProduct product = QProduct.product;
     return queryFactory.select(
         Projections.constructor(RecommendProductResponse.class,
             orderItem.orderItemId.productId,
+            product.name,
             orderItem.orderItemId.productId.count()
             ))
         .from(orderItem)
+          .innerJoin(product)
+          .on(orderItem.orderItemId.productId.eq(product.productId))
         .where(orderItem.orderStatus.eq(status)
             .and(orderItem.orderAt.between(startAt, endAt)))
         .groupBy(orderItem.orderItemId.productId)
