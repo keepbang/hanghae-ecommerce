@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 public class OrderItemRepositoryImpl implements OrderItemRepository {
 
   private final OrderItemJpaRepository orderItemJpaRepository;
+  private final RecommendProductRepository recommendProductRepository;
 
   @Override
   public void saveAll(List<OrderItem> orderItems) {
@@ -34,10 +35,6 @@ public class OrderItemRepositoryImpl implements OrderItemRepository {
       LocalDateTime startAt,
       LocalDateTime endAt
   ) {
-    return orderItemJpaRepository.getRecommendProduct(
-        status,
-        startAt,
-        endAt
-    );
+    return recommendProductRepository.getRecommendProduct(status, startAt, endAt);
   }
 }

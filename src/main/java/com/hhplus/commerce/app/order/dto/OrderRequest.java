@@ -16,7 +16,6 @@ import java.util.UUID;
  */
 public record OrderRequest(
     UUID userKey, // 사용자 아이디(uuid)
-    Long totalPrice, // 총 결제금액
     PaymentType paymentType, // 결제 타입
     String address, // 배송지
     LocalDateTime orderAt, // 결제 일시
@@ -24,5 +23,11 @@ public record OrderRequest(
     List<OrderItemRequest> orderItems // 주문 상품 리스트.
 
 ) {
+
+  public Long getTotalPrice() {
+    return this.orderItems.stream()
+        .mapToLong(OrderItemRequest::price)
+        .sum();
+  }
 
 }

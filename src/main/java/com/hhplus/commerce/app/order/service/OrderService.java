@@ -48,7 +48,7 @@ public class OrderService {
     String transactionId = walletService.use(
         new UseRequest(
             request.userKey(),
-            request.totalPrice())
+            request.getTotalPrice())
     );
 
     // 재고차감
@@ -59,7 +59,7 @@ public class OrderService {
     Order order = new Order(
         UUID.randomUUID(),
         request.userKey(),
-        request.totalPrice(),
+        request.getTotalPrice(),
         request.orderItems().size(),
         request.address(),
         request.paymentType(),

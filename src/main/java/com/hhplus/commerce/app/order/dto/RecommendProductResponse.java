@@ -10,7 +10,6 @@ package com.hhplus.commerce.app.order.dto;
  * @since 1.0
  */
 public record RecommendProductResponse(
-    Integer rank,
     Long productId,
     String name,
     Long orderCount

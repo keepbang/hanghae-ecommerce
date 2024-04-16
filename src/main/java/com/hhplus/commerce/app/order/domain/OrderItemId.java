@@ -2,6 +2,7 @@ package com.hhplus.commerce.app.order.domain;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -25,5 +26,23 @@ public class OrderItemId implements Serializable {
   public OrderItemId(Long orderSeqId, Long productId) {
     this.orderSeqId = orderSeqId;
     this.productId = productId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    OrderItemId that = (OrderItemId) o;
+    return Objects.equals(orderSeqId, that.orderSeqId)
+        && Objects.equals(productId, that.productId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(orderSeqId, productId);
   }
 }
