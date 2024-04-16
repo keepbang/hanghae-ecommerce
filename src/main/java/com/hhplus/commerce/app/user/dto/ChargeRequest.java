@@ -1,4 +1,6 @@
-package com.hhplus.commerce.app.product.dto;
+package com.hhplus.commerce.app.user.dto;
+
+import java.util.UUID;
 
 /**
  * create on 4/4/24. create by IntelliJ IDEA.
@@ -9,10 +11,9 @@ package com.hhplus.commerce.app.product.dto;
  * @version 1.0
  * @since 1.0
  */
-public record ProductRequest(
-    String name,
-    Long price,
-    Integer stock
+public record ChargeRequest(
+    UUID userKey,
+    Long amount
 ) {
 
 }

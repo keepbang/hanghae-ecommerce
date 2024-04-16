@@ -30,6 +30,11 @@ public interface OrderItemJpaRepository extends JpaRepository<OrderItem, OrderIt
       oi.orderStatus = :orderStatus
       and
       oi.orderAt between :startAt and :endAt
+    group by
+      oi.orderItemId.productId
+    order by
+      sum(oi.orderItemId.productId) desc
+    limit 5
   """)
   List<RecommendProductResponse> getRecommendProduct(
       @Param("orderStatus") OrderStatus orderStatus,

@@ -34,6 +34,12 @@ public class ProductService {
 
   @Transactional
   public void save(ProductRequest request) {
+    // 가격 검증
+    ProductValidator.priceValidation(request.price());
+
+    // 수량 검증
+    ProductValidator.quantityValidation(request.stock());
+
     Product savedProduct = productRepository.save(
         new Product(
             request.name(),

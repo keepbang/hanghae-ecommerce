@@ -10,8 +10,8 @@ import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
 import com.hhplus.commerce.app.order.repository.OrderItemRepository;
 import com.hhplus.commerce.app.order.repository.OrderRepository;
 import com.hhplus.commerce.app.product.service.InventoryService;
-import com.hhplus.commerce.app.wallet.dto.UseRequest;
-import com.hhplus.commerce.app.wallet.service.WalletService;
+import com.hhplus.commerce.app.user.dto.UseRequest;
+import com.hhplus.commerce.app.user.service.WalletService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +45,7 @@ public class OrderService {
   public void order(OrderRequest request) {
 
     // 결제
-    String transactionId = walletService.useWallet(
+    String transactionId = walletService.use(
         new UseRequest(
             request.userKey(),
             request.totalPrice())

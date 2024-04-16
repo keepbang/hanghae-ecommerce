@@ -2,7 +2,6 @@ package com.hhplus.commerce.app.product.service;
 
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
 import com.hhplus.commerce.app.product.domain.Inventory;
-import com.hhplus.commerce.app.product.dto.DeductionRequest;
 import com.hhplus.commerce.app.product.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,13 @@ public class InventoryService {
 
   @Transactional
   public void orderItemDeduction(OrderItemRequest request) {
+    Integer quantity = request.quantity();
+
+    ProductValidator.quantityValidation(quantity);
+
     Inventory inventory = inventoryRepository.findById(request.productId());
 
-    Inventory deductedInventory = inventory.deduction(request.quantity());
+    Inventory deductedInventory = inventory.deduction(quantity);
 
     inventoryRepository.save(deductedInventory);
 
