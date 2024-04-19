@@ -8,12 +8,14 @@ import com.hhplus.commerce.app.init.IntegrationTest;
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
 import com.hhplus.commerce.app.order.dto.OrderRequest;
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
-import com.hhplus.commerce.app.order.repository.OrderItemJpaRepository;
-import com.hhplus.commerce.app.order.repository.OrderJpaRepository;
 import com.hhplus.commerce.app.order.service.OrderService;
+import com.hhplus.commerce.app.product.dto.ProductResponse;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class OrderIntegrationTest extends IntegrationTest {
 
-  @Autowired
-  private OrderJpaRepository orderJpaRepository;
-  @Autowired
-  private OrderItemJpaRepository orderItemJpaRepository;
-
   // 주문
   @Autowired
   private OrderService orderService;
-
-  @BeforeEach
-  void setUp() throws Exception {
-    orderJpaRepository.deleteAll();
-    orderItemJpaRepository.deleteAll();
-  }
 
   @DisplayName("최근 3일동안 가장 많이 주문한 상품 5개 조회")
   @Test
@@ -92,6 +83,42 @@ public class OrderIntegrationTest extends IntegrationTest {
         .map(RecommendProductResponse::name)
         .toList()).containsExactly("장난감","바지","머그컵");
 
+  }
+
+  @DisplayName("동시 주문 시 재고가 부족하면 실패를 해야한다.")
+  @Test
+  void order_concurrency_test() throws Exception {
+    // given
+    long productId = 1L;
+    int numberOfThreads = 11;
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
+    CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+    // when - 주문
+    ConcurrentLinkedQueue<Integer> orderItems = new ConcurrentLinkedQueue<>();
+    for (int i = 0; i < numberOfThreads; i++) {
+      int finalI = i;
+      executorService.execute(() -> {
+        try {
+          orderService.order(new OrderRequest(
+              this.getUserKey(),
+              PaymentType.WALLET,
+              "서울 강남구",
+              LocalDateTime.now(),
+              List.of(new OrderItemRequest(productId, 1L, 1))
+          ));
+        } catch (Exception e) {
+          orderItems.add(finalI);
+        }
+        latch.countDown();
+      });
+    }
+
+    latch.await();
+    // then
+    assertThat(orderItems).hasSize(1);
+    ProductResponse productResponse = getProductResponse(productId);
+    assertThat(productResponse.stock()).isZero();
   }
 
 }

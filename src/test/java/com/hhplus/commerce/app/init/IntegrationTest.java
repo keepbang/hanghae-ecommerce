@@ -1,6 +1,9 @@
 package com.hhplus.commerce.app.init;
 
+import com.hhplus.commerce.app.order.repository.OrderItemJpaRepository;
+import com.hhplus.commerce.app.order.repository.OrderJpaRepository;
 import com.hhplus.commerce.app.product.dto.ProductRequest;
+import com.hhplus.commerce.app.product.dto.ProductResponse;
 import com.hhplus.commerce.app.product.repository.InventoryJpaRepository;
 import com.hhplus.commerce.app.product.repository.ProductJpaRepository;
 import com.hhplus.commerce.app.product.service.ProductService;
@@ -42,6 +45,12 @@ public class IntegrationTest {
   @Autowired
   WalletService walletService;
 
+  // 주문
+  @Autowired
+  OrderJpaRepository orderJpaRepository;
+  @Autowired
+  OrderItemJpaRepository orderItemJpaRepository;
+
   private UUID userKey = UUID.randomUUID();
 
   @BeforeEach
@@ -50,6 +59,8 @@ public class IntegrationTest {
     productJpaRepository.deleteAll();
     userJpaRepository.deleteAll();
     walletJpaRepository.deleteAll();
+    orderJpaRepository.deleteAll();
+    orderItemJpaRepository.deleteAll();
 
     productService.save(new ProductRequest("장난감", 1L, 10));
     productService.save(new ProductRequest("바지", 1L, 10));
@@ -60,12 +71,16 @@ public class IntegrationTest {
 
     userJpaRepository.save(new User(userKey, "kim", "서울 강남구"));
     walletService.charge(new ChargeRequest(
-        userKey, 10000L
+        userKey, 20L
     ));
   }
 
   public UUID getUserKey() {
     return userKey;
+  }
+
+  public ProductResponse getProductResponse(Long productId) {
+    return productService.findById(productId);
   }
 
 
