@@ -23,11 +23,13 @@ public class InventoryService {
 
   private final InventoryRepository inventoryRepository;
 
+  private final ProductValidator productValidator;
+
   @Transactional
   public void orderItemDeduction(OrderItemRequest request) {
     Integer quantity = request.quantity();
 
-    ProductValidator.quantityValidation(quantity);
+    productValidator.quantityValidation(quantity);
 
     Inventory inventory = inventoryRepository.findById(request.productId());
 

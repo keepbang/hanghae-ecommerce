@@ -2,8 +2,11 @@ package com.hhplus.commerce.app.cartitem.api;
 
 import com.hhplus.commerce.app.cartitem.dto.CartItemRequest;
 import com.hhplus.commerce.app.cartitem.dto.CartItemResponse;
+import com.hhplus.commerce.app.cartitem.service.CartItemService;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/carts")
+@RequiredArgsConstructor
 public class CartItemController {
+
+  private final CartItemService cartItemService;
 
   /**
    * 장바구니 추가(수량 변경). 기존에 있던거에 엎어치기.
@@ -34,6 +40,7 @@ public class CartItemController {
   public ResponseEntity<Void> addToCart(
       @RequestBody CartItemRequest request
   ) {
+    cartItemService.addToCart(request);
     return new ResponseEntity<>(
         HttpStatus.OK
     );
@@ -44,7 +51,7 @@ public class CartItemController {
    */
   @DeleteMapping("/users/{userId}/products/{productId}")
   public ResponseEntity<Void> removeCart(
-      @PathVariable("userId") Long userId,
+      @PathVariable("userId") UUID userId,
       @PathVariable("productId") Long productId
   ) {
     return new ResponseEntity<>(
@@ -57,13 +64,10 @@ public class CartItemController {
    */
   @GetMapping("/users/{userId}")
   public ResponseEntity<List<CartItemResponse>> getCartItems(
-      @PathVariable("userId") Long userId
+      @PathVariable("userId") UUID userId
   ) {
     return new ResponseEntity<>(
-        List.of(
-            new CartItemResponse(1L, "맥북", 1, 1_000_000L, LocalDateTime.now()),
-            new CartItemResponse(2L, "마우스", 1, 10_000L, LocalDateTime.now())
-        ),
+        cartItemService.getCartItems(userId),
         HttpStatus.OK
     );
   }

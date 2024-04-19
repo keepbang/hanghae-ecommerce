@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
  */
 class WalletValidatorTest {
 
+  private WalletValidator walletValidator = new WalletValidator();
+
   @Test
   @DisplayName("0이 들어올 경우 exception 발생")
   public void amountValidation_requestToZero() throws Exception {
@@ -24,7 +26,7 @@ class WalletValidatorTest {
     Long value = 0L;
     //when
     //then
-    assertThatThrownBy(() -> WalletValidator.amountValidation(value))
+    assertThatThrownBy(() -> walletValidator.amountValidation(value))
         .isInstanceOf(InvalidRequestException.class);
 
   }
@@ -36,7 +38,7 @@ class WalletValidatorTest {
     Long value = -1L;
     //when
     //then
-    assertThatThrownBy(() -> WalletValidator.amountValidation(value))
+    assertThatThrownBy(() -> walletValidator.amountValidation(value))
         .isInstanceOf(InvalidRequestException.class);
 
   }

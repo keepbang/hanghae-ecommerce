@@ -1,6 +1,6 @@
 package com.hhplus.commerce.app.cartitem.dto;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * create on 4/4/24. create by IntelliJ IDEA.
@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
  * @since 1.0
  */
 public record CartItemRequest(
-    Long userKey, // 사용자 아이디.
+    UUID userKey, // 사용자 아이디.
     Long productId, // 상품 아이디.
-    Integer quantity, // 상품 수량.
-    LocalDateTime eventAt // 이벤트 발생 시간.
+    Integer quantity // 상품 수량.
 ) {
 }

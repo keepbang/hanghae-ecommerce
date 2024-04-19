@@ -13,13 +13,16 @@ import com.hhplus.commerce.app.order.stub.StubOrderRepository;
 import com.hhplus.commerce.app.product.domain.Inventory;
 import com.hhplus.commerce.app.product.repository.InventoryRepository;
 import com.hhplus.commerce.app.product.service.InventoryService;
+import com.hhplus.commerce.app.product.service.ProductValidator;
 import com.hhplus.commerce.app.product.stub.StubInventoryRepository;
 import com.hhplus.commerce.app.user.dto.ChargeRequest;
 import com.hhplus.commerce.app.user.dto.WalletResponse;
-import com.hhplus.commerce.app.user.repository.UserRepository;
 import com.hhplus.commerce.app.user.repository.WalletHistoryRepository;
 import com.hhplus.commerce.app.user.repository.WalletRepository;
+import com.hhplus.commerce.app.user.service.ReadUserQuery;
+import com.hhplus.commerce.app.user.service.UserService;
 import com.hhplus.commerce.app.user.service.WalletService;
+import com.hhplus.commerce.app.user.service.WalletValidator;
 import com.hhplus.commerce.app.user.stub.StubUserRepository;
 import com.hhplus.commerce.app.user.stub.StubWalletHistoryRepository;
 import com.hhplus.commerce.app.user.stub.StubWalletRepository;
@@ -47,14 +50,20 @@ class OrderServiceTest {
   private StubOrderItemRepository orderItemRepository = new StubOrderItemRepository();
 
   private InventoryRepository inventoryRepository = new StubInventoryRepository();
-  private InventoryService inventoryService = new InventoryService(inventoryRepository);
+  private InventoryService inventoryService = new InventoryService(
+      inventoryRepository,
+      new ProductValidator()
+  );
 
   UUID userKey = UUID.randomUUID();
-  private UserRepository userRepository = new StubUserRepository(userKey);
+  private ReadUserQuery readUserQuery = new UserService(new StubUserRepository(userKey));
   private WalletRepository walletRepository = new StubWalletRepository();
   private WalletHistoryRepository walletHistoryRepository = new StubWalletHistoryRepository();
   private WalletService walletService = new WalletService(
-      userRepository, walletRepository, walletHistoryRepository
+      readUserQuery,
+      walletRepository,
+      walletHistoryRepository,
+      new WalletValidator()
   );
 
   @BeforeEach

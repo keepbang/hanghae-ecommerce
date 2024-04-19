@@ -1,5 +1,8 @@
 package com.hhplus.commerce.app.user.stub;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
 import com.hhplus.commerce.app.user.domain.User;
 import com.hhplus.commerce.app.user.repository.UserRepository;
 import java.util.UUID;

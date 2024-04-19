@@ -2,10 +2,8 @@ package com.hhplus.commerce.app.product.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.hhplus.commerce.app.common.exception.OutOfStockException;
-import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
 import com.hhplus.commerce.app.product.domain.Inventory;
 import com.hhplus.commerce.app.product.repository.InventoryRepository;
@@ -33,7 +31,8 @@ class InventoryServiceTest {
   void setUp() throws Exception {
 
     this.inventoryService = new InventoryService(
-        inventoryRepository
+        inventoryRepository,
+        new ProductValidator()
     );
 
     inventoryRepository.save(new Inventory(

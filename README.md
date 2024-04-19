@@ -92,7 +92,7 @@ orderAt datetime
 
 PRODUCT ||--o{ ORDER_ITEM: is
 ORDER_ITEM {
-order_id UUID PK
+order_id bigint PK
 product_id bigint PK
 order_price bigint
 order_quantity integer
@@ -118,7 +118,7 @@ created_at datetime
 }
 
 CART_ITEM {
-user_id UUID PK
+user_id bigint PK
 product_id bigint
 quantity integer
 created_at datetime
@@ -588,7 +588,7 @@ curl --location --request PATCH 'http://localhost:8080/wallet/charge' \
 
 - 요구사항
     - 사용자가 장바구니에 상품을 추가하는 API
-    - 수량에 `0`이 들어올 경우 삭제를 한다.
+    - 수량에 `0`이 들어올 수 없다.
     - 사용자별 상품은 하나만 장바구니에 추가 할 수 있다.
 - 시퀀스 다이어그램
   ```mermaid
@@ -623,7 +623,7 @@ PUT http://{server_url}/carts
 
 | 파라미터      | 타입       | 필수여부 | 설명        |
 |-----------|----------|------|-----------|
-| userId    | integer  | Y    | 사용자 아이디   |
+| userId    | string   | Y    | 사용자 아이디   |
 | productId | integer  | Y    | 상품 아이디    |
 | quantity  | integer  | Y    | 상품 수량     |
 | eventAt   | datetime | Y    | 이벤트 발생 시간 |
@@ -690,7 +690,7 @@ DELETE http://{server_url}/carts/users/{userId}/products/{productId}
 
 | 파라미터      | 타입      | 필수여부 | 설명      |
 |-----------|---------|------|---------|
-| userId    | integer | Y    | 사용자 아이디 |
+| userId    | string  | Y    | 사용자 아이디 |
 | productId | integer | Y    | 상품 아이디  |
 
 `Response`
@@ -753,9 +753,9 @@ GET http://{server_url}/carts/users/{userId}
 
 **Path Variable**
 
-| 파라미터   | 타입      | 필수여부 | 설명      |
-|--------|---------|------|---------|
-| userId | integer | Y    | 사용자 아이디 |
+| 파라미터   | 타입     | 필수여부 | 설명      |
+|--------|--------|------|---------|
+| userId | string | Y    | 사용자 아이디 |
 
 `Response`
 
@@ -784,4 +784,3 @@ GET http://{server_url}/carts/users/{userId}
 ```
 curl --location --request GET 'http://localhost:8080/carts/users/1'
 ```
-

@@ -1,5 +1,6 @@
 package com.hhplus.commerce.app.order.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Embeddable
 public class OrderItemId implements Serializable {
 
+  @Column(name = "order_id")
   private Long orderSeqId;
   private Long productId;
 

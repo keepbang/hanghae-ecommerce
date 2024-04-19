@@ -12,12 +12,13 @@ import org.springframework.stereotype.Component;
  * @version 1.0
  * @since 1.0
  */
-public final class WalletValidator {
+@Component
+public class WalletValidator {
 
-  private static final Long LIMIT_NUMBER = 0L;
+  private static final Long LIMIT_NUMBER = 1L;
 
-  public static void amountValidation(Long amount) {
-    if (amount <= LIMIT_NUMBER) {
+  public void amountValidation(Long amount) {
+    if (amount < LIMIT_NUMBER) {
       throw new InvalidRequestException("0보다 큰 양수만 입력 가능합니다.");
     }
   }

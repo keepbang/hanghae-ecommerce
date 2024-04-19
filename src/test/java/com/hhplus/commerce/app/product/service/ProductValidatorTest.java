@@ -1,11 +1,9 @@
 package com.hhplus.commerce.app.product.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.hhplus.commerce.app.common.exception.InvalidRequestException;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -20,6 +18,8 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 class ProductValidatorTest {
 
+  private ProductValidator productValidator = new ProductValidator();
+
   @DisplayName("quantityValidation(): 상품 수량은 0보다 큰 양수만 입력 가능합니다.")
   @ParameterizedTest
   @ValueSource(ints = {0, -1})
@@ -27,7 +27,7 @@ class ProductValidatorTest {
     // given
     // when
     // then
-    assertThatThrownBy(() -> ProductValidator.quantityValidation(quantity))
+    assertThatThrownBy(() -> productValidator.quantityValidation(quantity))
         .isInstanceOf(InvalidRequestException.class);
   }
 
@@ -38,7 +38,7 @@ class ProductValidatorTest {
     // given
     // when
     // then
-    assertThatThrownBy(() -> ProductValidator.priceValidation(price))
+    assertThatThrownBy(() -> productValidator.priceValidation(price))
         .isInstanceOf(InvalidRequestException.class);
   }
 

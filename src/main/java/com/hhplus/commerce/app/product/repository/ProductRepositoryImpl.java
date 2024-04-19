@@ -2,6 +2,7 @@ package com.hhplus.commerce.app.product.repository;
 
 import com.hhplus.commerce.app.common.exception.NotFoundException;
 import com.hhplus.commerce.app.product.domain.Product;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,13 +15,10 @@ import org.springframework.stereotype.Repository;
  * @since 1.0
  */
 @Repository
+@RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepository {
 
   private final ProductJpaRepository productJpaRepository;
-
-  public ProductRepositoryImpl(ProductJpaRepository productJpaRepository) {
-    this.productJpaRepository = productJpaRepository;
-  }
 
   @Override
   public Product save(Product product) {

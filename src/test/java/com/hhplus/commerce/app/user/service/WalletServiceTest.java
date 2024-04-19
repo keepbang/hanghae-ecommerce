@@ -7,7 +7,6 @@ import com.hhplus.commerce.app.user.domain.WalletHistory;
 import com.hhplus.commerce.app.user.dto.ChargeRequest;
 import com.hhplus.commerce.app.user.dto.UseRequest;
 import com.hhplus.commerce.app.user.dto.WalletResponse;
-import com.hhplus.commerce.app.user.repository.UserRepository;
 import com.hhplus.commerce.app.user.repository.WalletHistoryRepository;
 import com.hhplus.commerce.app.user.repository.WalletRepository;
 import com.hhplus.commerce.app.user.stub.StubUserRepository;
@@ -33,7 +32,7 @@ class WalletServiceTest {
   UUID userKey = UUID.randomUUID();
 
   private WalletService walletService;
-  private UserRepository userRepository = new StubUserRepository(userKey);
+  private ReadUserQuery readUserQuery = new UserService(new StubUserRepository(userKey));
   private WalletRepository walletRepository = new StubWalletRepository();
   private WalletHistoryRepository walletHistoryRepository = new StubWalletHistoryRepository();
 
@@ -41,9 +40,10 @@ class WalletServiceTest {
   @BeforeEach
   void setUp() {
     this.walletService = new WalletService(
-        userRepository,
+        readUserQuery,
         walletRepository,
-        walletHistoryRepository
+        walletHistoryRepository,
+        new WalletValidator()
     );
   }
 

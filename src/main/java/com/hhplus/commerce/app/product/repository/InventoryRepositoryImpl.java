@@ -1,6 +1,7 @@
 package com.hhplus.commerce.app.product.repository;
 
 import com.hhplus.commerce.app.product.domain.Inventory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,13 +14,10 @@ import org.springframework.stereotype.Repository;
  * @since 1.0
  */
 @Repository
+@RequiredArgsConstructor
 public class InventoryRepositoryImpl implements InventoryRepository {
 
   private final InventoryJpaRepository inventoryJpaRepository;
-
-  public InventoryRepositoryImpl(InventoryJpaRepository inventoryJpaRepository) {
-    this.inventoryJpaRepository = inventoryJpaRepository;
-  }
 
   @Override
   public Inventory findById(Long productId) {

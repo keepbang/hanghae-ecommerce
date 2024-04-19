@@ -31,7 +31,10 @@ class ProductServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.productService = new ProductService(productRepository, inventoryRepository);
+    this.productService = new ProductService(
+        productRepository,
+        inventoryRepository,
+        new ProductValidator());
   }
 
   @DisplayName("save(): 상품 저장시 재고 테이블에 상품 재고가 저장된다.")

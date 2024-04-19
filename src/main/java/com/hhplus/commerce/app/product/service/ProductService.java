@@ -1,15 +1,11 @@
 package com.hhplus.commerce.app.product.service;
 
-import com.hhplus.commerce.app.common.exception.OutOfStockException;
 import com.hhplus.commerce.app.product.domain.Inventory;
 import com.hhplus.commerce.app.product.domain.Product;
 import com.hhplus.commerce.app.product.dto.ProductRequest;
 import com.hhplus.commerce.app.product.dto.ProductResponse;
 import com.hhplus.commerce.app.product.repository.InventoryRepository;
-import com.hhplus.commerce.app.product.repository.ProductJpaRepository;
 import com.hhplus.commerce.app.product.repository.ProductRepository;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,19 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ProductService {
+public class ProductService implements ReadProductQuery {
 
   private final ProductRepository productRepository;
   private final InventoryRepository inventoryRepository;
+
+  private final ProductValidator productValidator;
 
 
   @Transactional
   public void save(ProductRequest request) {
     // 가격 검증
-    ProductValidator.priceValidation(request.price());
+    productValidator.priceValidation(request.price());
 
     // 수량 검증
-    ProductValidator.quantityValidation(request.stock());
+    productValidator.quantityValidation(request.stock());
 
     Product savedProduct = productRepository.save(
         new Product(
@@ -60,6 +58,7 @@ public class ProductService {
    * @param id  상품 아이디.
    * @return  상품 정보
    */
+  @Override
   public ProductResponse findById(Long id) {
 
     // 상품 조회

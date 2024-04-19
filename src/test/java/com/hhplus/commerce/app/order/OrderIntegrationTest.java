@@ -13,7 +13,6 @@ import com.hhplus.commerce.app.product.service.ProductService;
 import com.hhplus.commerce.app.user.domain.User;
 import com.hhplus.commerce.app.user.dto.ChargeRequest;
 import com.hhplus.commerce.app.user.repository.UserJpaRepository;
-import com.hhplus.commerce.app.user.repository.WalletRepository;
 import com.hhplus.commerce.app.user.service.WalletService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,7 +66,7 @@ public class OrderIntegrationTest {
     // 사용자 등록, 지갑 충전
     UUID userKey = UUID.randomUUID();
 
-    User savedUser = userJpaRepository.save(new User(userKey, "kim", "서울 강남구"));
+    userJpaRepository.save(new User(userKey, "kim", "서울 강남구"));
     walletService.charge(new ChargeRequest(
         userKey, 10000L
     ));

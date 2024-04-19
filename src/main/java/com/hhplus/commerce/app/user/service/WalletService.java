@@ -1,13 +1,11 @@
 package com.hhplus.commerce.app.user.service;
 
 import com.hhplus.commerce.app.common.type.TransactionType;
-import com.hhplus.commerce.app.user.domain.User;
 import com.hhplus.commerce.app.user.domain.Wallet;
 import com.hhplus.commerce.app.user.domain.WalletHistory;
 import com.hhplus.commerce.app.user.dto.ChargeRequest;
 import com.hhplus.commerce.app.user.dto.UseRequest;
 import com.hhplus.commerce.app.user.dto.WalletResponse;
-import com.hhplus.commerce.app.user.repository.UserRepository;
 import com.hhplus.commerce.app.user.repository.WalletHistoryRepository;
 import com.hhplus.commerce.app.user.repository.WalletRepository;
 import java.time.LocalDateTime;
@@ -30,12 +28,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class WalletService {
 
-  private final UserRepository userRepository;
+  private final ReadUserQuery ReadUserQuery;
   private final WalletRepository walletRepository;
   private final WalletHistoryRepository walletHistoryRepository;
+  private final WalletValidator walletValidator;
 
   public WalletResponse getUserWallet(UUID userKey) {
-    Wallet wallet = walletRepository.findByUserId(getUserKey(userKey));
+    Wallet wallet = walletRepository.findByUserId(
+        ReadUserQuery.getUserIdByUserKey(userKey)
+    );
 
     return new WalletResponse(
         userKey,
@@ -46,9 +47,9 @@ public class WalletService {
 
   @Transactional
   public void charge(ChargeRequest request) {
-    WalletValidator.amountValidation(request.amount());
+    walletValidator.amountValidation(request.amount());
 
-    Long userId = getUserKey(request.userKey());
+    Long userId = ReadUserQuery.getUserIdByUserKey(request.userKey());
     Wallet foundWallet = walletRepository.findByUserId(
         userId
     );
@@ -69,9 +70,9 @@ public class WalletService {
    */
   @Transactional
   public String use(UseRequest request) {
-    WalletValidator.amountValidation(request.amount());
+    walletValidator.amountValidation(request.amount());
 
-    Long userId = getUserKey(request.userKey());
+    Long userId = ReadUserQuery.getUserIdByUserKey(request.userKey());
     Wallet foundWallet = walletRepository.findByUserId(
         userId
     );
@@ -95,11 +96,6 @@ public class WalletService {
         amount,
         LocalDateTime.now()
     ));
-  }
-
-  private Long getUserKey(UUID userKey) {
-    User user = userRepository.findByUserKeyOrThrows(userKey);
-    return user.getId();
   }
 
 }

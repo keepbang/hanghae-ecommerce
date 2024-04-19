@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
  */
 public record CartItemResponse(
     Long productId, // 상품 아이디.
-    String productName, // 상품 이름.
     Integer quantity, // 장바구니 상품 수량
-    Long price, // 상품 가격
-    LocalDateTime lastUpdateAt // 마지막 업데이트 시간.
-
+    LocalDateTime lastUpdateAt, // 마지막 업데이트 시간.
+    String productName, // 상품 이름.
+    Integer stock, // 남은 수량
+    Long price // 장바구니 수량 * 상품 가격
 ) {
 
 }
