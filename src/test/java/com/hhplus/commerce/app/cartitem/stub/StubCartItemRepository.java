@@ -29,8 +29,7 @@ public class StubCartItemRepository implements CartItemRepository {
   @Override
   public void deleteByUserIdAndProductId(Long userId, Long productId) {
     cartItems.removeIf(cartItem ->
-        cartItem.getProductId().equals(productId)
-            && cartItem.getUserSeqId().equals(userId));
+        cartItem.getProductId().equals(productId));
   }
 
   @Override

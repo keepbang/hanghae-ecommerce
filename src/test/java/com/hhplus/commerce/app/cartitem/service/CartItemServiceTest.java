@@ -86,4 +86,46 @@ class CartItemServiceTest {
     assertThat(responses.get(0).quantity()).isEqualTo(quantity);
   }
 
+  @DisplayName("removeCartItem(): 장바구니 삭제")
+  @Test
+  void removeCartItem_ok() {
+    // given
+    Long productId = 1L;
+
+    CartItemRequest request = new CartItemRequest(
+        userKey,
+        1L,
+        1
+    );
+    cartItemService.addToCart(request);
+    // when
+    cartItemService.removeCartItem(userKey, productId);
+
+    // then
+    List<CartItemResponse> cartItems = cartItemService.getCartItems(userKey);
+    assertThat(cartItems).isEmpty();
+  }
+
+  @DisplayName("getCartItems(): 장바구니 상품 조회")
+  @Test
+  void getCartItems_ok() {
+    // given
+    CartItemRequest request = new CartItemRequest(
+        userKey,
+        1L,
+        4
+    );
+    cartItemService.addToCart(request);
+    // when
+    List<CartItemResponse> cartItems = cartItemService.getCartItems(userKey);
+
+    // then
+    assertThat(cartItems).hasSize(1);
+    assertThat(cartItems.get(0).quantity()).isEqualTo(4);
+    assertThat(cartItems.get(0).price()).isEqualTo(1000 * 4);
+  }
+
+
+
+
 }

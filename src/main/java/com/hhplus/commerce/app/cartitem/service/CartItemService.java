@@ -71,4 +71,9 @@ public class CartItemService {
         })
         .toList();
   }
+
+  public void removeCartItem(UUID userKey, Long productId) {
+    Long userId = readUserQuery.getUserIdByUserKey(userKey);
+    cartItemRepository.deleteByUserIdAndProductId(userId, productId);
+  }
 }

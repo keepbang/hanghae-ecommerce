@@ -54,6 +54,7 @@ public class CartItemController {
       @PathVariable("userId") UUID userId,
       @PathVariable("productId") Long productId
   ) {
+    cartItemService.removeCartItem(userId, productId);
     return new ResponseEntity<>(
         HttpStatus.OK
     );
