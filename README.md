@@ -30,6 +30,7 @@
 
 - [Milestone](#milestone)
 - [ERD](#erd)
+- [브랜치 전략](./branch_strategy.md)
 - [Swagger 화면](#swagger-ui)
 - 상품
   - [상품 조회 API](#상품-조회-api)
