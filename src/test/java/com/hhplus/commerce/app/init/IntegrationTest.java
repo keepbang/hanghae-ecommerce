@@ -12,10 +12,14 @@ import com.hhplus.commerce.app.user.dto.ChargeRequest;
 import com.hhplus.commerce.app.user.repository.UserJpaRepository;
 import com.hhplus.commerce.app.user.repository.WalletJpaRepository;
 import com.hhplus.commerce.app.user.service.WalletService;
+import jakarta.persistence.EntityManager;
 import java.util.UUID;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * create on 4/19/24. create by IntelliJ IDEA.
@@ -51,16 +55,13 @@ public class IntegrationTest {
   @Autowired
   OrderItemJpaRepository orderItemJpaRepository;
 
+  @Autowired
+  private EntityManager entityManager;
+
   private UUID userKey = UUID.randomUUID();
 
   @BeforeEach
   void setUp() {
-    inventoryJpaRepository.deleteAll();
-    productJpaRepository.deleteAll();
-    userJpaRepository.deleteAll();
-    walletJpaRepository.deleteAll();
-    orderJpaRepository.deleteAll();
-    orderItemJpaRepository.deleteAll();
 
     productService.save(new ProductRequest("장난감", 1L, 10));
     productService.save(new ProductRequest("바지", 1L, 10));
@@ -71,7 +72,7 @@ public class IntegrationTest {
 
     userJpaRepository.save(new User(userKey, "kim", "서울 강남구"));
     walletService.charge(new ChargeRequest(
-        userKey, 20L
+        userKey, 50L
     ));
   }
 

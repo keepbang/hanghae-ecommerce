@@ -19,6 +19,7 @@ import java.util.concurrent.Executors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.jdbc.Sql;
 
 /**
  * create on 4/16/24. create by IntelliJ IDEA.
@@ -35,6 +36,7 @@ public class OrderIntegrationTest extends IntegrationTest {
   @Autowired
   private OrderService orderService;
 
+  @Sql("classpath:db/tableInit.sql")
   @DisplayName("최근 3일동안 가장 많이 주문한 상품 5개 조회")
   @Test
   void getRecommendProduct_Recommend1() throws Exception {
@@ -46,7 +48,7 @@ public class OrderIntegrationTest extends IntegrationTest {
         "서울 강남구",
         LocalDateTime.now(),
         List.of(
-            new OrderItemRequest(1L, 1L, 1),
+            new OrderItemRequest(3L, 1L, 1),
             new OrderItemRequest(2L, 1L, 1),
             new OrderItemRequest(4L, 1L, 1)
         )
@@ -58,7 +60,7 @@ public class OrderIntegrationTest extends IntegrationTest {
         "서울 강남구",
         LocalDateTime.now(),
         List.of(
-            new OrderItemRequest(1L, 1L, 1),
+            new OrderItemRequest(3L, 1L, 1),
             new OrderItemRequest(2L, 1L, 1)
         )
     ));
@@ -69,7 +71,7 @@ public class OrderIntegrationTest extends IntegrationTest {
         "서울 강남구",
         LocalDateTime.now(),
         List.of(
-            new OrderItemRequest(1L, 1L, 1)
+            new OrderItemRequest(3L, 1L, 1)
         )
     ));
 
@@ -81,10 +83,11 @@ public class OrderIntegrationTest extends IntegrationTest {
     assertThat(responseList).hasSize(3);
     assertThat(responseList.stream()
         .map(RecommendProductResponse::name)
-        .toList()).containsExactly("장난감","바지","머그컵");
+        .toList()).containsExactly("티셔츠","바지","머그컵");
 
   }
 
+  @Sql("classpath:db/tableInit.sql")
   @DisplayName("동시 주문 시 재고가 부족하면 실패를 해야한다.")
   @Test
   void order_concurrency_test() throws Exception {
