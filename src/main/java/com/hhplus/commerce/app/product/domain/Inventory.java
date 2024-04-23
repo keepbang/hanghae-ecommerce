@@ -41,7 +41,7 @@ public class Inventory extends AuditEntity {
   // 재고 차감
   public Inventory deduction(Integer quantity) {
     if (this.currentStock < quantity) {
-      throw new OutOfStockException();
+      throw new OutOfStockException(this.productId);
     }
 
     return new Inventory(

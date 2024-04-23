@@ -13,7 +13,7 @@ import static com.hhplus.commerce.app.common.exception.ErrorMessage.OUT_OF_STOCK
  */
 public class OutOfStockException extends RuntimeException {
 
-  public OutOfStockException() {
-    super(OUT_OF_STOCK_MESSAGE.getMessage());
+  public OutOfStockException(Long productId) {
+    super(productId + " : " + OUT_OF_STOCK_MESSAGE.getMessage());
   }
 }
