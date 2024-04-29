@@ -14,6 +14,10 @@ env:
   ENVIRONMENT: dev
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: hhplus-dev
+  ECS_SERVICE: hhplus-ecommerce-dev
+  ECS_CLUSTER: cluster-hhplus-java-dev
+  ECS_TASK_DEFINITION: .taskdefinition/task-definition-dev.json
+  CONTAINER_NAME: service-dev
 
 jobs:
   build:
@@ -56,6 +60,21 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 #      - name: Notify Slack
 #        uses: 8398a7/action-slack@v3
 #        with:
