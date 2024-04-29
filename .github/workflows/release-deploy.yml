@@ -2,6 +2,8 @@ name: dev ecommerce server deploy
 
 on:
   pull_request:
+    types:
+      - closed
     branches: [ "release" ]
 
 permissions:
