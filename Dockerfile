@@ -11,4 +11,4 @@ WORKDIR /apps
 COPY build/libs/ecommerce.jar /apps/ecommerce.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/apps/app.jar"]
+ENTRYPOINT ["java","-jar","/apps/ecommerce.jar"]
