@@ -1,0 +1,50 @@
+name: dev ecommerce server deploy
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches: [ "release" ]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # docker build
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # wait for approval
+      - name: Wait approval
+        uses: keepbang/issue-approval@v1.0.4
+        with:
+          secret-token: ${{ secrets.GITHUB_TOKEN }}
+          approvers: keepbang
+        # wait for approval
+
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        if: always() # Pick up events even if the job fails or is canceled.
+
