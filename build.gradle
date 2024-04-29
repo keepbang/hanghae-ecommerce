@@ -9,6 +9,10 @@ plugins {
 group = 'com.hhplus.commerce'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+    archiveFileName = 'ecommerce.jar'
+}
+
 java {
     sourceCompatibility = '17'
 }

@@ -8,7 +8,7 @@ LABEL version="1.0"
 
 WORKDIR /apps
 # copy app jar.
-COPY build/libs/*.jar /apps/app.jar
+COPY ./build/libs/ecommerce.jar /apps/ecommerce.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/apps/app.jar"]
