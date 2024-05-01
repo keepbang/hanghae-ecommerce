@@ -29,7 +29,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+          ./gradlew build
+          ./gradlew jacocoTestCoverageVerification
+
 
       # docker build
       - name: Configure AWS credentials

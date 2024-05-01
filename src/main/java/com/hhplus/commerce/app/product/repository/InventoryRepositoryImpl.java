@@ -21,7 +21,7 @@ public class InventoryRepositoryImpl implements InventoryRepository {
 
   @Override
   public Inventory findById(Long productId) {
-    return inventoryJpaRepository.findById(productId)
+    return inventoryJpaRepository.findByProductId(productId)
         .orElse(new Inventory(productId, 0));
   }
 

@@ -27,10 +27,12 @@
 ---
 
 # 목차
-
 - [Milestone](#milestone)
 - [ERD](#erd)
 - [브랜치 전략](./branch_strategy.md)
+- [동시성 이슈 정리]
+
+## API Docs
 - [Swagger 화면](#swagger-ui)
 - 상품
   - [상품 조회 API](#상품-조회-api)
@@ -127,6 +129,8 @@ update_at datetime
 }
 
 ```
+
+## API Docs
 
 <br/>
 

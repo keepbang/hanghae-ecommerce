@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.test.context.jdbc.Sql;
  * @version 1.0
  * @since 1.0
  */
+@Slf4j
 public class OrderIntegrationTest extends IntegrationTest {
 
   // 주문
@@ -92,13 +94,13 @@ public class OrderIntegrationTest extends IntegrationTest {
   @Test
   void order_concurrency_test() throws Exception {
     // given
-    long productId = 1L;
+    long productId = 2L;
     int numberOfThreads = 11;
-    ExecutorService executorService = Executors.newFixedThreadPool(10);
+    ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
     CountDownLatch latch = new CountDownLatch(numberOfThreads);
 
     // when - 주문
-    ConcurrentLinkedQueue<Integer> orderItems = new ConcurrentLinkedQueue<>();
+    ConcurrentLinkedQueue<Integer> failedOrder = new ConcurrentLinkedQueue<>();
     for (int i = 0; i < numberOfThreads; i++) {
       int finalI = i;
       executorService.execute(() -> {
@@ -111,7 +113,7 @@ public class OrderIntegrationTest extends IntegrationTest {
               List.of(new OrderItemRequest(productId, 1L, 1))
           ));
         } catch (Exception e) {
-          orderItems.add(finalI);
+          failedOrder.add(finalI);
         }
         latch.countDown();
       });
@@ -119,7 +121,7 @@ public class OrderIntegrationTest extends IntegrationTest {
 
     latch.await();
     // then
-    assertThat(orderItems).hasSize(1);
+    assertThat(failedOrder).hasSize(1);
     ProductResponse productResponse = getProductResponse(productId);
     assertThat(productResponse.stock()).isZero();
   }

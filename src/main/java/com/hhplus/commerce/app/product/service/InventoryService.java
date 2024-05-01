@@ -5,6 +5,7 @@ import com.hhplus.commerce.app.product.domain.Inventory;
 import com.hhplus.commerce.app.product.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -25,7 +26,7 @@ public class InventoryService {
 
   private final ProductValidator productValidator;
 
-  @Transactional
+  @Transactional(isolation = Isolation.READ_COMMITTED)
   public void orderItemDeduction(OrderItemRequest request) {
     Integer quantity = request.quantity();
 

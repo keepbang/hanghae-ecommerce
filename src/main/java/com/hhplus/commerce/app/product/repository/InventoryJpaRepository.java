@@ -1,7 +1,10 @@
 package com.hhplus.commerce.app.product.repository;
 
 import com.hhplus.commerce.app.product.domain.Inventory;
+import jakarta.persistence.LockModeType;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 
 /**
  * create on 4/11/24. create by IntelliJ IDEA.
@@ -13,5 +16,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 1.0
  */
 public interface InventoryJpaRepository extends JpaRepository<Inventory, Long> {
+
+  @Lock(LockModeType.PESSIMISTIC_READ)
+  Optional<Inventory> findByProductId(Long productId);
 
 }

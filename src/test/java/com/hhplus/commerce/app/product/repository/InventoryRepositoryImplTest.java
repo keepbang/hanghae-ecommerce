@@ -36,7 +36,7 @@ class InventoryRepositoryImplTest {
   @DisplayName("상품 재고가 없을 경우 재고를 0으로 반환")
   public void findById_dataNotFound_stockIsZero() throws Exception {
     //given
-    given(inventoryJpaRepository.findById(anyLong()))
+    given(inventoryJpaRepository.findByProductId(anyLong()))
         .willReturn(Optional.empty());
 
     //when
