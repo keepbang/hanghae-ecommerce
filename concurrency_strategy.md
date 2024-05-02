@@ -37,6 +37,7 @@
 # 재고 차감 테스트 진행
 
 ## 테스트 시나리오
+
 - 상품 100개 추가
 - 101명이 동일한 상품 구매
 - 재고는 0이 되고 실패한 주문이 한개가 존재해야한다.
@@ -77,14 +78,18 @@ void inventory_concurrency_test() throws Exception {
     assertThat(failedOrder).hasSize(1);
 }
 ```
+
 - 결과
-![img_2.png](img_2.png)
+
+![img_2.png](./images/img_2.png)
 
 - 상품 개수가 남아있으면 안되는데 87개가 남아있다.
 
 
 ## 낙관적락 적용
+
 - 락을 적용할 entity에 version을 추가하고 사용하는 메서드에 Lock 어노테이션을 적용한다.
+
 ```java
 // entity
 //....
@@ -100,9 +105,10 @@ Optional<Inventory> findByProductId(Long productId);
 
 - 재고가 하나도 감소하지 않았다.
 
-![img_3.png](img_3.png)
+![img_3.png](./images/img_3.png)
 
 ---
+
 ## 비관적락 사용
 
 - version을 사용하지 않고 Lock 어노테이션만 적용해서 사용할 수 있다.
@@ -115,7 +121,7 @@ Optional<Inventory> findByProductId(Long productId);
 
 - 테스트가 성공한 걸 볼 수 있다.
 
-![img_4.png](img_4.png)
+![img_4.png](./images/img_4.png)
 
 ---
 ## 분산락 사용
