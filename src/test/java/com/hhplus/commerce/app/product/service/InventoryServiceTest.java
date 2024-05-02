@@ -3,6 +3,7 @@ package com.hhplus.commerce.app.product.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.hhplus.commerce.app.common.redis.RedissonConfig;
 import com.hhplus.commerce.app.common.exception.OutOfStockException;
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
 import com.hhplus.commerce.app.product.domain.Inventory;
@@ -50,7 +51,8 @@ class InventoryServiceTest {
     );
     // when
     // then
-    assertThatThrownBy(() -> inventoryService.orderItemDeduction(request))
+    assertThatThrownBy(() -> inventoryService.orderItemDeduction(
+        request.productId().toString(), request))
         .isInstanceOf(OutOfStockException.class);
   }
 
@@ -64,7 +66,8 @@ class InventoryServiceTest {
         productId, 1L, quantity
     );
     // when
-    inventoryService.orderItemDeduction(request);
+    inventoryService.orderItemDeduction(
+        request.productId().toString(), request);
     // then
     Inventory inventory = inventoryRepository.findById(productId);
     assertThat(inventory.getCurrentStock()).isEqualTo(0);

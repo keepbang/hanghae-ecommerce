@@ -53,7 +53,9 @@ public class OrderService {
 
     // 재고차감
     request.orderItems()
-        .forEach(inventoryService::orderItemDeduction);
+        .forEach(order -> {
+          inventoryService.orderItemDeduction(order.productId().toString(), order);
+        });
 
     // 주문
     Order order = new Order(

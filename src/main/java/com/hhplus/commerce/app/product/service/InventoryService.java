@@ -1,11 +1,13 @@
 package com.hhplus.commerce.app.product.service;
 
+import com.hhplus.commerce.app.common.redis.DistributedLock;
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
 import com.hhplus.commerce.app.product.domain.Inventory;
 import com.hhplus.commerce.app.product.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,26 +20,26 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 1.0
  */
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class InventoryService {
 
   private final InventoryRepository inventoryRepository;
 
   private final ProductValidator productValidator;
 
-  @Transactional(isolation = Isolation.READ_COMMITTED)
-  public void orderItemDeduction(OrderItemRequest request) {
+  @DistributedLock(key = "#lockName")
+  public void orderItemDeduction(String lockName, OrderItemRequest request) {
+    Long productId = request.productId();
     Integer quantity = request.quantity();
 
     productValidator.quantityValidation(quantity);
 
-    Inventory inventory = inventoryRepository.findById(request.productId());
+    Inventory inventory = inventoryRepository.findById(productId);
 
     Inventory deductedInventory = inventory.deduction(quantity);
 
     inventoryRepository.save(deductedInventory);
-
   }
 
 }

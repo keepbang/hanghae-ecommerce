@@ -99,6 +99,7 @@ Optional<Inventory> findByProductId(Long productId);
 ```
 
 - 재고가 하나도 감소하지 않았다.
+
 ![img_3.png](img_3.png)
 
 ---
@@ -113,4 +114,57 @@ Optional<Inventory> findByProductId(Long productId);
 ```
 
 - 테스트가 성공한 걸 볼 수 있다.
+
 ![img_4.png](img_4.png)
+
+---
+## 분산락 사용
+
+- 비관적락을 사용하게 되면 데이터에 대기상태가 발생되어 DB 부하가 발생하게되는데 이런 부분을 DB가 아닌 redis등을 사용해서 부하를 분산 할 수 있다.
+- java에서는 redisson을 사용해서 분산락을 사용 할 수 있다.
+- 키를 사용해서 락을 획득하고 비즈니스로직을 수행한 다음 락을 반환하는 프로세스를 가진다.
+
+```java
+
+// dependency 추가
+// https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter
+implementation 'org.redisson:redisson-spring-boot-starter:3.29.0'
+
+// spring aop를 사용하여 DistributedLock 어노테이션을 사용하는 메소드에 Lock을 건다.
+// 파라미터로 lockName을 받아서 lock key로 사용한다.
+@Around("@annotation(com.hhplus.commerce.app.common.redis.DistributedLock)")
+public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
+  MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+  Method method = signature.getMethod();
+  DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
+
+  String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
+  RLock rLock = redissonClient.getLock(key);  // (1)
+
+  try {
+    boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
+    if (!available) {
+      return false;
+    }
+
+    return aopForTransaction.proceed(joinPoint);  // (3)
+  } catch (InterruptedException e) {
+    throw new InterruptedException();
+  } finally {
+    try {
+      rLock.unlock();   // (4)
+    } catch (IllegalMonitorStateException e) {
+      log.info("Redisson Lock Already UnLock {} {}", method.getName(), key
+      );
+    }
+  }
+}
+
+// DistributedLock 사용 부분
+@DistributedLock(key = "#lockName")
+public void orderItemDeduction(String lockName, OrderItemRequest request) {
+  // 비즈니스 로직
+}
+
+```
+

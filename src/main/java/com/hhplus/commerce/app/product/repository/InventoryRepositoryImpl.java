@@ -3,6 +3,9 @@ package com.hhplus.commerce.app.product.repository;
 import com.hhplus.commerce.app.product.domain.Inventory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * create on 4/11/24. create by IntelliJ IDEA.

@@ -2,14 +2,10 @@ package com.hhplus.commerce.app.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.hhplus.commerce.app.common.type.PaymentType;
 import com.hhplus.commerce.app.init.IntegrationTest;
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
-import com.hhplus.commerce.app.order.dto.OrderRequest;
 import com.hhplus.commerce.app.product.dto.ProductResponse;
 import com.hhplus.commerce.app.product.service.InventoryService;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -55,7 +51,8 @@ public class InventoryIntegrationTest extends IntegrationTest {
               1
           );
 
-          inventoryService.orderItemDeduction(request);
+          inventoryService.orderItemDeduction(request.productId().toString(),
+              request);
 
         } catch (Exception e) {
           failedOrder.add(finalI);
