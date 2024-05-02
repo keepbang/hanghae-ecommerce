@@ -29,8 +29,8 @@
 # 목차
 - [Milestone](#milestone)
 - [ERD](#erd)
-- [브랜치 전략](concurrency_strategy.md)
-- [동시성 이슈 정리]
+- [브랜치 전략](./branch_strategy.md)
+- [동시성 이슈 정리](./concurrency_strategy.md)
 
 ## API Docs
 - [Swagger 화면](#swagger-ui)
