@@ -94,7 +94,7 @@ public class OrderIntegrationTest extends IntegrationTest {
   @Test
   void order_concurrency_test() throws Exception {
     // given
-    long productId = 2L;
+    long productId = 5L;
     int numberOfThreads = 11;
     ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
     CountDownLatch latch = new CountDownLatch(numberOfThreads);

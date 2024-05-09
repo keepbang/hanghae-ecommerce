@@ -31,6 +31,7 @@
 - [ERD](#erd)
 - [브랜치 전략](./branch_strategy.md)
 - [동시성 이슈 정리](./concurrency_strategy.md)
+- [데이터 조회 인덱스 적용](./apply_index.md)
 
 ## API Docs
 - [Swagger 화면](#swagger-ui)
