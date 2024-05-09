@@ -2,6 +2,7 @@ package com.hhplus.commerce.app.product.repository;
 
 import com.hhplus.commerce.app.product.domain.Inventory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +32,7 @@ public class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @Override
-  @Cacheable(cacheNames = "INVENTORY_PRODUCT_ID",
+  @CacheEvict(cacheNames = "INVENTORY_PRODUCT_ID",
           key = "#inventory.productId",
           condition = "#inventory != null",
           cacheManager = "cacheManager")
