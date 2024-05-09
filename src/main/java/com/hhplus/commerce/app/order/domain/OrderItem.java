@@ -23,14 +23,14 @@ import lombok.NoArgsConstructor;
  * @since 1.0
  */
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "order_item",
     indexes = @Index(
         name = "idx_status_order_at",
         columnList = "order_status,order_at"
     )
 )
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
   @EmbeddedId

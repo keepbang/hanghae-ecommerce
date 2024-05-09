@@ -41,4 +41,44 @@
   - 다차원 공간 데이터를 효율적으로 관리하고 범위검색 및 근접한 데이터 검색이 가능하다.
 
 
-     
+# 인덱스 적용
+- 최근 3일간 가장 많이 주문한 상품 5개를 조회하는 쿼리에 인덱스를 적용해 보고자 한다.
+  
+- QueryDSL 코드
+```java
+public List<RecommendProductResponse> getRecommendProduct(OrderStatus status,
+                                                          LocalDateTime startAt, LocalDateTime endAt) {
+  QOrderItem orderItem = QOrderItem.orderItem;
+  QProduct product = QProduct.product;
+  return queryFactory.select(
+                  Projections.constructor(RecommendProductResponse.class,
+                          orderItem.orderItemId.productId,
+                          product.name,
+                          orderItem.orderItemId.productId.count()
+                  ))
+          .from(orderItem)
+          .innerJoin(product)
+          .on(orderItem.orderItemId.productId.eq(product.productId))
+          .where(orderItem.orderStatus.eq(status)
+                  .and(orderItem.orderAt.between(startAt, endAt)))
+          .groupBy(orderItem.orderItemId.productId)
+          .orderBy(orderItem.orderItemId.productId.count().desc())
+          .limit(5)
+          .fetch();
+}
+```
+
+- `where` 절에서 사용하는 `orderStatus`와 `orderAt`에 `index`를 설정해주었다.
+- `OrderItem` 엔티티에 `index`를 설정 했다. 
+```java
+@Table(name = "order_item",
+        indexes = @Index(
+                name = "idx_status_order_at",
+                columnList = "order_status,order_at"
+        )
+)
+public class OrderItem {
+  //...
+}
+```
+
