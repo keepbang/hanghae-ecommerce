@@ -4,6 +4,7 @@ import com.hhplus.commerce.app.user.domain.User;
 import com.hhplus.commerce.app.user.repository.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,10 @@ public class UserService implements ReadUserQuery {
   private final UserRepository userRepository;
 
   @Override
+  @Cacheable(cacheNames = "USER_KEY",
+          key = "#userKey.toString()",
+          condition = "#userKey != null",
+          cacheManager = "cacheManager")
   public Long getUserIdByUserKey(UUID userKey) {
     User user = userRepository.findByUserKeyOrThrows(userKey);
     return user.getId();

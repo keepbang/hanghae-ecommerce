@@ -28,14 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class WalletService {
 
-  private final ReadUserQuery ReadUserQuery;
+  private final ReadUserQuery readUserQuery;
   private final WalletRepository walletRepository;
   private final WalletHistoryRepository walletHistoryRepository;
   private final WalletValidator walletValidator;
 
   public WalletResponse getUserWallet(UUID userKey) {
     Wallet wallet = walletRepository.findByUserId(
-        ReadUserQuery.getUserIdByUserKey(userKey)
+        readUserQuery.getUserIdByUserKey(userKey)
     );
 
     return new WalletResponse(
@@ -49,7 +49,7 @@ public class WalletService {
   public void charge(ChargeRequest request) {
     walletValidator.amountValidation(request.amount());
 
-    Long userId = ReadUserQuery.getUserIdByUserKey(request.userKey());
+    Long userId = readUserQuery.getUserIdByUserKey(request.userKey());
     Wallet foundWallet = walletRepository.findByUserId(
         userId
     );
@@ -72,7 +72,7 @@ public class WalletService {
   public String use(UseRequest request) {
     walletValidator.amountValidation(request.amount());
 
-    Long userId = ReadUserQuery.getUserIdByUserKey(request.userKey());
+    Long userId = readUserQuery.getUserIdByUserKey(request.userKey());
     Wallet foundWallet = walletRepository.findByUserId(
         userId
     );

@@ -3,10 +3,11 @@ package com.hhplus.commerce.app.order.repository;
 import com.hhplus.commerce.app.common.type.OrderStatus;
 import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * create on 4/12/24. create by IntelliJ IDEA.
