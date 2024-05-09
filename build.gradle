@@ -41,6 +41,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
     // https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter
     implementation 'org.redisson:redisson-spring-boot-starter:3.29.0'
 

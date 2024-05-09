@@ -3,7 +3,6 @@ package com.hhplus.commerce.app.product.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.hhplus.commerce.app.common.redis.RedissonConfig;
 import com.hhplus.commerce.app.common.exception.OutOfStockException;
 import com.hhplus.commerce.app.order.dto.OrderItemRequest;
 import com.hhplus.commerce.app.product.domain.Inventory;

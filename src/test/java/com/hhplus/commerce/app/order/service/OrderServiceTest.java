@@ -2,7 +2,6 @@ package com.hhplus.commerce.app.order.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.hhplus.commerce.app.common.redis.RedissonConfig;
 import com.hhplus.commerce.app.common.type.PaymentType;
 import com.hhplus.commerce.app.order.domain.Order;
 import com.hhplus.commerce.app.order.domain.OrderItem;

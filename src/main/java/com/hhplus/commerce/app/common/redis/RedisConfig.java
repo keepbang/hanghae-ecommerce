@@ -6,6 +6,11 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * create on 5/1/24. create by IntelliJ IDEA.
@@ -17,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0
  */
 @Configuration
-public class RedissonConfig {
+public class RedisConfig {
 
   @Value("${spring.data.redis.host}")
   private String host;
@@ -33,6 +38,21 @@ public class RedissonConfig {
     config.useSingleServer().setAddress(REDISSON_HOST_PREFIX + host + ":" + port);
 
     return Redisson.create(config);
+  }
+
+  @Bean
+  public RedisConnectionFactory redisConnectionFactory() {
+    return new LettuceConnectionFactory(
+        new RedisStandaloneConfiguration(host, port)
+    );
+  }
+
+  @Bean
+  public RedisTemplate<?, ?> redisTemplate() {
+    RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setConnectionFactory(redisConnectionFactory());
+    redisTemplate.setDefaultSerializer(new StringRedisSerializer());
+    return redisTemplate;
   }
 
 }
