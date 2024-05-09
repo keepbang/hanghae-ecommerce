@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,6 +94,10 @@ public class OrderService {
 
   }
 
+  @Cacheable(cacheNames = "RECOMMEND_PRODUCT",
+          key = "#type.name()",
+          condition = "#type != null",
+          cacheManager = "cacheManager")
   public List<RecommendProductResponse> getRecommendProduct(RecommendType type) {
     return switch(type) {
       case RECOMMEND_01 -> orderItemRepository.getRecommendProduct(
@@ -101,5 +107,10 @@ public class OrderService {
       );
     };
   }
+
+  @CacheEvict(cacheNames = "RECOMMEND_PRODUCT",
+          key = "RECOMMEND_01",
+          cacheManager = "cacheManager")
+  public void recommendProductType1Evict() {}
 
 }
