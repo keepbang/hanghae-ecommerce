@@ -28,8 +28,7 @@ public class RedisCacheConfig {
   public CacheManager cacheManager(RedisConnectionFactory cf) {
     RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-        .entryTtl(Duration.ofMinutes(3L)); // 캐쉬 저장 시간 3분 설정
+        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
     return RedisCacheManager
         .RedisCacheManagerBuilder
