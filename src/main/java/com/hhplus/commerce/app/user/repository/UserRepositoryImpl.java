@@ -4,6 +4,7 @@ import com.hhplus.commerce.app.common.exception.NotFoundException;
 import com.hhplus.commerce.app.user.domain.User;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -22,6 +23,10 @@ public class UserRepositoryImpl implements UserRepository {
   private final UserJpaRepository userJpaRepository;
 
   @Override
+  @Cacheable(cacheNames = "USER_KEY",
+          key = "#userKey.toString()",
+          condition = "#userKey != null",
+          cacheManager = "cacheManager")
   public User findByUserKeyOrThrows(UUID userKey) {
     return userJpaRepository.findByUserKey(userKey)
         .orElseThrow(NotFoundException::new);

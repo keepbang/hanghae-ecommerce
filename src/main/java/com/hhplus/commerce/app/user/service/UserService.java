@@ -25,10 +25,6 @@ public class UserService implements ReadUserQuery {
   private final UserRepository userRepository;
 
   @Override
-  @Cacheable(cacheNames = "USER_KEY",
-          key = "#userKey.toString()",
-          condition = "#userKey != null",
-          cacheManager = "cacheManager")
   public Long getUserIdByUserKey(UUID userKey) {
     User user = userRepository.findByUserKeyOrThrows(userKey);
     return user.getId();

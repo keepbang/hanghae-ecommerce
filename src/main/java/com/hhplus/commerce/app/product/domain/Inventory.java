@@ -44,8 +44,6 @@ public class Inventory extends AuditEntity {
       throw new OutOfStockException(this.productId);
     }
 
-//    this.currentStock -= quantity;
-
     return new Inventory(
         this.productId,
         this.currentStock - quantity

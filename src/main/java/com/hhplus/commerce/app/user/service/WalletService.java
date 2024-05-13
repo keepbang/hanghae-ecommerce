@@ -34,8 +34,9 @@ public class WalletService {
   private final WalletValidator walletValidator;
 
   public WalletResponse getUserWallet(UUID userKey) {
+    Long userIdByUserKey = readUserQuery.getUserIdByUserKey(userKey);
     Wallet wallet = walletRepository.findByUserId(
-        readUserQuery.getUserIdByUserKey(userKey)
+            userIdByUserKey
     );
 
     return new WalletResponse(
