@@ -29,6 +29,7 @@
 # 목차
 - [Milestone](#milestone)
 - [ERD](#erd)
+- [트러블 슈팅](#트러블-슈팅)
 - [브랜치 전략](./branch_strategy.md)
 - [동시성 이슈 정리](./concurrency_strategy.md)
 - [데이터 조회 인덱스 적용](./apply_index.md)
@@ -131,6 +132,34 @@ update_at datetime
 }
 
 ```
+
+<br/>
+
+---
+
+## 트러블 슈팅
+
+### 주문 API 응답시간이 길어지는 문제
+- 주문시 외부 API 요청에 따라 응답 시간이나 트랜젝션이 길어지는 문제 발생
+- 주문은 성공했지만 외부 API가 실패하면 주문이 실패되는 상황이 발생하게 된다.
+- 외부 API를 비동기로 처리하여 데이터를 보내는 역할만 할 수 있도록 리펙토링
+  ```java
+  @Async
+  @Override
+  public void send(OrderRequest request) {
+    log.debug("call external api");
+    // 외부 API 호출 
+      try {
+          Thread.sleep((long) (Math.random() * 1000));
+      } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+      }
+  }
+  ```
+
+---
+
+<br/>
 
 ## API Docs
 
