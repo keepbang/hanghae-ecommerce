@@ -2,10 +2,11 @@ package com.hhplus.commerce.app.user.repository;
 
 import com.hhplus.commerce.app.common.exception.NotFoundException;
 import com.hhplus.commerce.app.user.domain.User;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
 
 /**
  * create on 4/12/24. create by IntelliJ IDEA.

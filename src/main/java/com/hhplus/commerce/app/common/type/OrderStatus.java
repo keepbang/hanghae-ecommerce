@@ -10,13 +10,11 @@ package com.hhplus.commerce.app.common.type;
  * @since 1.0
  */
 public enum OrderStatus {
-  PAID, // 결제완료까지 된 상태
-  ORDER_CONFIRM, // 주문 확인
+  PAID, // 결제 완료 까지 된 상태
+  ORDER_COMPLETED, // 주문 완료
   DELIVERY_WAIT, // 배송 대기
   DELIVERY, // 배송중
   DELIVERY_COMPLETED, // 배송 완료
-
-  ORDER_COMPLETED; // 주문 완료
-
-
+  ORDER_CANCELED, // 주문 취소
+;
 }

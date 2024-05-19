@@ -1,12 +1,12 @@
 package com.hhplus.commerce.app.user.service;
 
-import com.hhplus.commerce.app.user.domain.User;
 import com.hhplus.commerce.app.user.repository.UserRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 /**
  * create on 4/18/24. create by IntelliJ IDEA.
@@ -26,7 +26,7 @@ public class UserService implements ReadUserQuery {
 
   @Override
   public Long getUserIdByUserKey(UUID userKey) {
-    User user = userRepository.findByUserKeyOrThrows(userKey);
-    return user.getId();
+    return userRepository.findByUserKeyOrThrows(userKey)
+            .getId();
   }
 }

@@ -88,3 +88,5 @@ create table order_item
 );
 
 create index idx_status_order_at on order_item (order_status, order_at);
+
+insert into users(user_key, name, address) values('54211913-3695-4c19-85fb-28fe844d32c7', 'kim','강남');

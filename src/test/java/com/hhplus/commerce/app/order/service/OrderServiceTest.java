@@ -33,6 +33,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 /**
  * create on 4/16/24. create by IntelliJ IDEA.
@@ -69,8 +70,13 @@ class OrderServiceTest {
   @BeforeEach
   void setUp() {
     this.orderService = new OrderService(
-        orderRepository, orderItemRepository,
-        walletService, inventoryService, new DataPlatformSenderImpl()
+            orderRepository, orderItemRepository,
+            walletService, inventoryService, new ApplicationEventPublisher() {
+      @Override
+      public void publishEvent(Object event) {
+
+      }
+    }
     );
   }
 

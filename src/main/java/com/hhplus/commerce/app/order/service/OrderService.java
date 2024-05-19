@@ -7,22 +7,24 @@ import com.hhplus.commerce.app.order.domain.OrderItem;
 import com.hhplus.commerce.app.order.domain.OrderItemId;
 import com.hhplus.commerce.app.order.dto.OrderRequest;
 import com.hhplus.commerce.app.order.dto.RecommendProductResponse;
+import com.hhplus.commerce.app.order.event.OrderEvent;
 import com.hhplus.commerce.app.order.repository.OrderItemRepository;
 import com.hhplus.commerce.app.order.repository.OrderRepository;
 import com.hhplus.commerce.app.product.service.InventoryService;
 import com.hhplus.commerce.app.user.dto.UseRequest;
 import com.hhplus.commerce.app.user.service.WalletService;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * create on 4/12/24. create by IntelliJ IDEA.
@@ -45,7 +47,7 @@ public class OrderService {
   private final WalletService walletService;
   private final InventoryService inventoryService;
 
-  private final DataPlatformSender dataPlatformSender;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Transactional
   public void order(OrderRequest request) {
@@ -57,11 +59,11 @@ public class OrderService {
             request.getTotalPrice())
     );
 
-    // 재고차감
+    // 재고차감 (ORDER_COMPLETED 상태로 변경)
     request.orderItems()
-        .forEach(order -> {
-          inventoryService.orderItemDeduction(order.productId().toString(), order);
-        });
+        .forEach(order ->
+                inventoryService.orderItemDeduction(order.productId().toString(), order)
+        );
 
     // 주문
     Order order = new Order(
@@ -94,7 +96,7 @@ public class OrderService {
     orderItemRepository.saveAll(itemList);
 
     // 데이터 플랫폼 전달
-    dataPlatformSender.send(request);
+    eventPublisher.publishEvent(new OrderEvent(request));
 
   }
 
