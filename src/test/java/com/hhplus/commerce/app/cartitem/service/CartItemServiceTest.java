@@ -10,7 +10,7 @@ import com.hhplus.commerce.app.common.exception.InvalidRequestException;
 import com.hhplus.commerce.app.product.dto.ProductResponse;
 import com.hhplus.commerce.app.product.service.ProductValidator;
 import com.hhplus.commerce.app.product.stub.StubReadProductQuery;
-import com.hhplus.commerce.app.user.service.ReadUserQuery;
+import com.hhplus.commerce.app.user.service.UserQuery;
 import com.hhplus.commerce.app.user.service.UserService;
 import com.hhplus.commerce.app.user.stub.StubUserRepository;
 import java.util.List;
@@ -35,7 +35,7 @@ class CartItemServiceTest {
   private CartItemService cartItemService;
   UUID userKey = UUID.randomUUID();
 
-  private ReadUserQuery readUserQuery = new UserService(new StubUserRepository(userKey));
+  private UserQuery userQuery = new UserService(new StubUserRepository(userKey));
 
   @BeforeEach
   void setUp() {
@@ -44,7 +44,7 @@ class CartItemServiceTest {
         , new ProductResponse(3L, "마우스", 23000L, 10)
     );
     cartItemService = new CartItemService(
-        readUserQuery,
+            userQuery,
         new StubCartItemRepository(),
         new StubReadProductQuery(productResponses),
         new ProductValidator()

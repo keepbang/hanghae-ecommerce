@@ -32,4 +32,10 @@ public class StubUserRepository implements UserRepository {
   public User findByUserKeyOrThrows(UUID userKey) {
     return this.user;
   }
+
+  @Override
+  public User save(User user) {
+    this.user = user;
+    return this.user;
+  }
 }

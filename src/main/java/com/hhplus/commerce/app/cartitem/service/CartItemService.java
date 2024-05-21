@@ -7,7 +7,7 @@ import com.hhplus.commerce.app.cartitem.repository.CartItemRepository;
 import com.hhplus.commerce.app.product.dto.ProductResponse;
 import com.hhplus.commerce.app.product.service.ProductValidator;
 import com.hhplus.commerce.app.product.service.ReadProductQuery;
-import com.hhplus.commerce.app.user.service.ReadUserQuery;
+import com.hhplus.commerce.app.user.service.UserQuery;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CartItemService {
 
-  private final ReadUserQuery readUserQuery;
+  private final UserQuery userQuery;
 
   private final CartItemRepository cartItemRepository;
 
@@ -40,7 +40,7 @@ public class CartItemService {
   public void addToCart(CartItemRequest request) {
     productValidator.quantityValidation(request.quantity());
 
-    Long userId = readUserQuery.getUserIdByUserKey(request.userKey());
+    Long userId = userQuery.getUserIdByUserKey(request.userKey());
     CartItem cartItem = new CartItem(
         userId,
         request.productId(),
@@ -51,7 +51,7 @@ public class CartItemService {
   }
 
   public List<CartItemResponse> getCartItems(UUID userKey) {
-    Long userId = readUserQuery.getUserIdByUserKey(userKey);
+    Long userId = userQuery.getUserIdByUserKey(userKey);
     return cartItemRepository.findAllByUserId(userId)
         .stream()
         .map(entity -> {
@@ -73,7 +73,7 @@ public class CartItemService {
   }
 
   public void removeCartItem(UUID userKey, Long productId) {
-    Long userId = readUserQuery.getUserIdByUserKey(userKey);
+    Long userId = userQuery.getUserIdByUserKey(userKey);
     cartItemRepository.deleteByUserIdAndProductId(userId, productId);
   }
 }

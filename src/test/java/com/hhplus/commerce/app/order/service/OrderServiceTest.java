@@ -19,7 +19,7 @@ import com.hhplus.commerce.app.user.dto.ChargeRequest;
 import com.hhplus.commerce.app.user.dto.WalletResponse;
 import com.hhplus.commerce.app.user.repository.WalletHistoryRepository;
 import com.hhplus.commerce.app.user.repository.WalletRepository;
-import com.hhplus.commerce.app.user.service.ReadUserQuery;
+import com.hhplus.commerce.app.user.service.UserQuery;
 import com.hhplus.commerce.app.user.service.UserService;
 import com.hhplus.commerce.app.user.service.WalletService;
 import com.hhplus.commerce.app.user.service.WalletValidator;
@@ -57,11 +57,11 @@ class OrderServiceTest {
   );
 
   UUID userKey = UUID.randomUUID();
-  private ReadUserQuery readUserQuery = new UserService(new StubUserRepository(userKey));
+  private UserQuery userQuery = new UserService(new StubUserRepository(userKey));
   private WalletRepository walletRepository = new StubWalletRepository();
   private WalletHistoryRepository walletHistoryRepository = new StubWalletHistoryRepository();
   private WalletService walletService = new WalletService(
-      readUserQuery,
+          userQuery,
       walletRepository,
       walletHistoryRepository,
       new WalletValidator()

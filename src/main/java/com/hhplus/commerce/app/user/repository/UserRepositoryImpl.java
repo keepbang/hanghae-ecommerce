@@ -32,4 +32,9 @@ public class UserRepositoryImpl implements UserRepository {
     return userJpaRepository.findByUserKey(userKey)
         .orElseThrow(NotFoundException::new);
   }
+
+  @Override
+  public User save(User user) {
+    return userJpaRepository.save(user);
+  }
 }

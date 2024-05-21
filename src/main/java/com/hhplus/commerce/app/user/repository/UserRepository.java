@@ -16,4 +16,6 @@ public interface UserRepository {
 
   User findByUserKeyOrThrows(UUID userKey);
 
+  User save(User user);
+
 }

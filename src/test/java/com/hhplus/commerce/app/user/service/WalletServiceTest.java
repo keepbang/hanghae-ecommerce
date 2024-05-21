@@ -32,7 +32,7 @@ class WalletServiceTest {
   UUID userKey = UUID.randomUUID();
 
   private WalletService walletService;
-  private ReadUserQuery readUserQuery = new UserService(new StubUserRepository(userKey));
+  private UserQuery userQuery = new UserService(new StubUserRepository(userKey));
   private WalletRepository walletRepository = new StubWalletRepository();
   private WalletHistoryRepository walletHistoryRepository = new StubWalletHistoryRepository();
 
@@ -40,7 +40,7 @@ class WalletServiceTest {
   @BeforeEach
   void setUp() {
     this.walletService = new WalletService(
-        readUserQuery,
+            userQuery,
         walletRepository,
         walletHistoryRepository,
         new WalletValidator()

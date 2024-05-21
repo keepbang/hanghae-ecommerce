@@ -1,5 +1,6 @@
 package com.hhplus.commerce.app.user.service;
 
+import com.hhplus.commerce.app.user.dto.UserResponse;
 import java.util.UUID;
 
 /**
@@ -11,8 +12,10 @@ import java.util.UUID;
  * @version 1.0
  * @since 1.0
  */
-public interface ReadUserQuery {
+public interface UserQuery {
 
   Long getUserIdByUserKey(UUID userKey);
+
+  UserResponse findByUserKey(UUID userKey);
 
 }
