@@ -8,11 +8,11 @@
 
 - AS-IS
 
-![img.png](k6/cart_test_before.png)
+![img.png](images/cart_test_before.png)
 
 - TO-BE(캐시 추가)
 
-![img.png](k6/cart_test_cache.png)
+![img.png](images/cart_test_cache.png)
 
 
 
@@ -20,11 +20,11 @@
 
 - 캐시 & 인덱스 적용 안함
 
-![top_order_before.png](top_order_before.png)
+![top_order_before.png](images/top_order_before.png)
 
 - TO-BE
 
-![top_order_after.png](top_order_after.png)
+![top_order_after.png](images/top_order_after.png)
 
 
 # 모니터링
