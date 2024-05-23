@@ -34,6 +34,7 @@
 - [동시성 이슈 정리](./concurrency_strategy.md)
 - [데이터 조회 인덱스 적용](./apply_index.md)
 - [캐시 전략](./cache_strategy.md)
+- [성능 개선을 위한 테스트 진행](./stress_test.md)
 
 ## API Docs
 - [Swagger 화면](#swagger-ui)

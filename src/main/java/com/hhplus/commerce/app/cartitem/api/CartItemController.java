@@ -1,9 +1,9 @@
 package com.hhplus.commerce.app.cartitem.api;
 
+import com.hhplus.commerce.app.cartitem.dto.CartItemList;
 import com.hhplus.commerce.app.cartitem.dto.CartItemRequest;
 import com.hhplus.commerce.app.cartitem.dto.CartItemResponse;
 import com.hhplus.commerce.app.cartitem.service.CartItemService;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class CartItemController {
    * 장바구니 조회
    */
   @GetMapping("/users/{userId}")
-  public ResponseEntity<List<CartItemResponse>> getCartItems(
+  public ResponseEntity<CartItemList> getCartItems(
       @PathVariable("userId") UUID userId
   ) {
     return new ResponseEntity<>(

@@ -116,7 +116,7 @@ public class OrderService {
 
   @Scheduled(fixedDelay = 300000) // 5분
   @CacheEvict(cacheNames = "RECOMMEND_PRODUCT",
-          key = "RECOMMEND_01",
+          key = "'RECOMMEND_01'",
           cacheManager = "cacheManager")
   public void recommendProductType1Evict() {
     log.debug("Initialize RECOMMEND_01 type cache data");

@@ -1,6 +1,7 @@
 package com.hhplus.commerce.app.cartitem.service;
 
 import com.hhplus.commerce.app.cartitem.domain.CartItem;
+import com.hhplus.commerce.app.cartitem.dto.CartItemList;
 import com.hhplus.commerce.app.cartitem.dto.CartItemRequest;
 import com.hhplus.commerce.app.cartitem.dto.CartItemResponse;
 import com.hhplus.commerce.app.cartitem.repository.CartItemRepository;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +40,9 @@ public class CartItemService {
 
   private final ProductValidator productValidator;
 
+  @CacheEvict(cacheNames = "USER_CART_ITEM",
+      key = "#request.userKey().toString()",
+      cacheManager = "cacheManager")
   public void addToCart(CartItemRequest request) {
     productValidator.quantityValidation(request.quantity());
 
@@ -50,9 +56,13 @@ public class CartItemService {
     cartItemRepository.save(cartItem);
   }
 
-  public List<CartItemResponse> getCartItems(UUID userKey) {
+  @Cacheable(cacheNames = "USER_CART_ITEM",
+      key = "#userKey.toString()",
+      condition = "#userKey != null",
+      cacheManager = "cacheManager")
+  public CartItemList getCartItems(UUID userKey) {
     Long userId = userQuery.getUserIdByUserKey(userKey);
-    return cartItemRepository.findAllByUserId(userId)
+    return new CartItemList(cartItemRepository.findAllByUserId(userId)
         .stream()
         .map(entity -> {
           ProductResponse product = readProductQuery.findById(entity.getProductId());
@@ -69,9 +79,13 @@ public class CartItemService {
           );
 
         })
-        .toList();
+        .toList()
+    );
   }
 
+  @CacheEvict(cacheNames = "USER_CART_ITEM",
+      key = "#userKey.toString()",
+      cacheManager = "cacheManager")
   public void removeCartItem(UUID userKey, Long productId) {
     Long userId = userQuery.getUserIdByUserKey(userKey);
     cartItemRepository.deleteByUserIdAndProductId(userId, productId);

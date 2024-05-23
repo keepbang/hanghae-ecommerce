@@ -35,3 +35,9 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

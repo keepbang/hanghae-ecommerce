@@ -16,7 +16,7 @@
   - `Major Release` : 새로운 기능이나 긴 기간을 두고 개발이 필요한 작업
   - `Minor Release` : 기존 기능을 개선하거나 몇주 내의 짧은 개발건 등의 작업
   - `Patch Release` : `patch`버전은 수시로 업데이트 되며, `Application`의 버그/패치 수정사항을 적용하는 경우 사용
-  ![img.png](img.png)
+  ![img.png](k6/cart_stress.png)
 
 ### staging
 - QA용 서버로 배포되는 브랜치

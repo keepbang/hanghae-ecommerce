@@ -67,31 +67,4 @@ public class RedisConfig {
     return redisTemplate;
   }
 
-  @Bean
-  public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-    GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper());
-
-    RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-            .entryTtl(Duration.ofMinutes(3L)); // 캐쉬 저장 시간 3분 설정
-
-    return RedisCacheManager
-            .builder(redisConnectionFactory)
-            .cacheDefaults(redisCacheConfiguration)
-            .build();
-  }
-
-  private ObjectMapper objectMapper() {
-    PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator
-            .builder()
-            .allowIfSubType(Object.class)
-            .build();
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    mapper.registerModule(new JavaTimeModule());
-    mapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
-    return mapper;
-  }
-
 }

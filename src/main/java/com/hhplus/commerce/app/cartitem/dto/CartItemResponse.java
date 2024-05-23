@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @version 1.0
  * @since 1.0
  */
-public record CartItemResponse(
+public record CartItemResponse (
     Long productId, // 상품 아이디.
     Integer quantity, // 장바구니 상품 수량
     LocalDateTime lastUpdateAt, // 마지막 업데이트 시간.

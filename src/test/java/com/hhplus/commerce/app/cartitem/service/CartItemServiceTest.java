@@ -3,6 +3,7 @@ package com.hhplus.commerce.app.cartitem.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.hhplus.commerce.app.cartitem.dto.CartItemList;
 import com.hhplus.commerce.app.cartitem.dto.CartItemRequest;
 import com.hhplus.commerce.app.cartitem.dto.CartItemResponse;
 import com.hhplus.commerce.app.cartitem.stub.StubCartItemRepository;
@@ -82,8 +83,9 @@ class CartItemServiceTest {
     // when
     cartItemService.addToCart(request);
     // then
-    List<CartItemResponse> responses = cartItemService.getCartItems(userKey);
-    assertThat(responses.get(0).quantity()).isEqualTo(quantity);
+    CartItemList list = cartItemService.getCartItems(userKey);
+    List<CartItemResponse> cartItems = list.getCartItems();
+    assertThat(cartItems.get(0).quantity()).isEqualTo(quantity);
   }
 
   @DisplayName("removeCartItem(): 장바구니 삭제")
@@ -102,7 +104,8 @@ class CartItemServiceTest {
     cartItemService.removeCartItem(userKey, productId);
 
     // then
-    List<CartItemResponse> cartItems = cartItemService.getCartItems(userKey);
+    CartItemList list = cartItemService.getCartItems(userKey);
+    List<CartItemResponse> cartItems = list.getCartItems();
     assertThat(cartItems).isEmpty();
   }
 
@@ -117,7 +120,8 @@ class CartItemServiceTest {
     );
     cartItemService.addToCart(request);
     // when
-    List<CartItemResponse> cartItems = cartItemService.getCartItems(userKey);
+    CartItemList list = cartItemService.getCartItems(userKey);
+    List<CartItemResponse> cartItems = list.getCartItems();
 
     // then
     assertThat(cartItems).hasSize(1);
